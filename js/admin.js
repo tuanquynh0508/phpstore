@@ -7,4 +7,3 @@ $('.btn-delete').click(function(e){
 $('.error input').focus(function(){
 	$(this).closest('.error').removeClass('error');
 });
-

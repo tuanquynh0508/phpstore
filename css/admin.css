@@ -35,6 +35,22 @@ p {
 	cursor: not-allowed !important;
 }
 
+.m-b-10 {
+	margin-bottom: 10px;
+}
+
+.m-b-20 {
+	margin-bottom: 20px;
+}
+
+.m-b-30 {
+	margin-bottom: 30px;
+}
+
+.v-middle {
+	vertical-align: middle;
+}
+
 .wrapper {
 	width: 960px;
 	margin: 0px auto;
@@ -47,6 +63,7 @@ p {
 #pageHeader {
 	height: 40px;
 	background-color: #ccc;
+	position: relative;
 }
 #pageHeader h1 {
 	font-size: 20px;
@@ -104,6 +121,13 @@ p {
 	border-bottom: 1px dotted #ccc;
 }
 
+#userBox {
+	color: #000;
+	position: absolute;
+	right: 10px;
+	top: 15px;
+}
+
 .pagination-link ul {
 	list-style: none;
 	padding: 0px;
@@ -149,6 +173,25 @@ p {
 }
 .form-control {
 	float: left;
+}
+
+input,
+textarea {
+	border: 1px solid #ccc;
+	padding: 5px;
+	vertical-align: middle;
+}
+input:focus:invalid,
+textarea:focus:invalid {
+	background: url(../img/admin/invalid.png) no-repeat 99% 50%;
+    border-color: #b03535;
+	padding-right: 20px;
+}
+input:required:valid,
+textarea:required:valid { /* when a field is considered valid by the browser */
+    background: url(../img/admin/valid.png) no-repeat 99% 50%;
+    border-color: #28921f;
+	padding-right: 20px;
 }
 .input-sm {
 	width: 100px;
