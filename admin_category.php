@@ -5,6 +5,7 @@ include 'libs/functions.php';
 use libs\classes\DBAccess;
 use libs\classes\FlashMessage;
 use libs\classes\DBPagination;
+use libs\classes\HttpException;
 
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
@@ -24,15 +25,20 @@ $where = "WHERE title LIKE '%$keyword%' OR slug LIKE '%$keyword%'";
 
 //Delete record
 if(isset($_GET['action']) && isset($_GET['id']) && $_GET['action']=='delete'){
-	$oDBAccess->deleteById('category', $_GET['id']);
-	$oFlashMessage->setFlashMessage('warning', 'Đã xóa bản ghi có id là '.$_GET['id']);
+	try {
+		$oDBAccess->deleteById('category', $_GET['id']);
+		$oFlashMessage->setFlashMessage('success', 'Đã xóa bản ghi có id là '.$_GET['id']);
+	} catch (HttpException $e) {
+		$oFlashMessage->setFlashMessage('error', "Không thể xóa bản ghi có id {$_GET['id']} được.");
+	}
+
 	header("Location: admin_$pageAliasName.php");
 	exit;
 }
 
 //Get total record for pagination
 $totalRecord = intval($oDBAccess->scalarBySQL("SELECT COUNT(*) FROM category ".$where));
-$oDBPagination = new DBPagination($totalRecord, 2);
+$oDBPagination = new DBPagination($totalRecord, 10);
 //Get list
 $list = $oDBAccess->findAllBySql("SELECT * FROM category $where ORDER BY created_at DESC {$oDBPagination->getLimit()}");
 ?>
@@ -41,6 +47,8 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM category $where ORDER BY created
 
 <h2 id="pageTitle"><?= $pageTitle ?></h2>
 <p><a href="admin_<?= $pageAliasName ?>_form.php">Thêm mới</a></p>
+
+<?php include "libs/includes/admin/flash_message.inc.php"; ?>
 
 <?php if(!empty($list)): ?>
 <div class="search-box m-b-10">
@@ -65,12 +73,12 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM category $where ORDER BY created
 		<?php foreach ($list as $item): ?>
 		<tr>
 			<td><?= $item->id ?></td>
-			<td><?= $item->title ?></td>
+			<td><a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><?= $item->title ?></a></td>
 			<td><?= $item->slug ?></td>
 			<td class="text-center"><?= renderActive($item, 'admin_'.$pageAliasName.'.php') ?></td>
 			<td class="text-center">
-				<a href="admin_<?= $pageAliasName ?>_form.php?id=1"><img src="img/admin/edit.png"/></a>
-				<a href="admin_<?= $pageAliasName ?>.php?action=delete&id=1" class="btn-delete"><img src="img/admin/trash.png"/></a>
+				<a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><img src="img/admin/edit.png"/></a>
+				<a href="admin_<?= $pageAliasName ?>.php?action=delete&id=<?= $item->id ?>" class="btn-delete"><img src="img/admin/trash.png"/></a>
 			</td>
 		</tr>
 		<?php endforeach; ?>

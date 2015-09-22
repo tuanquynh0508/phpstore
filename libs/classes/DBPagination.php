@@ -15,7 +15,7 @@ class DBPagination
 	public function __construct($totalRecord, $limit = 10)
 	{
 		$this->limit = $limit;
-		
+
 		//Pagination calculator
 		$this->page = 1;
 		if(isset($_GET['page'])) {
@@ -41,19 +41,31 @@ class DBPagination
 		$next = ($this->page+1 <= $this->maxPage)?$this->page+1:$this->maxPage;
 
 		$html = '<ul class="clearfix">';
-		$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $first).'" class="disabled"><img src="img/admin/first.png"/></a></li>';
-		$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $prev).'" class="disabled"><img src="img/admin/prev.png"/></a></li>';
+
+		if($this->page > 1) {
+			$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $first).'"><img src="img/admin/first.png"/></a></li>';
+			$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $prev).'"><img src="img/admin/prev.png"/></a></li>';
+		} else {
+			$html .= '	<li><a href="#" class="disabled"><img src="img/admin/first.png"/></a></li>';
+			$html .= '	<li><a href="#" class="disabled"><img src="img/admin/prev.png"/></a></li>';
+		}
 
 		for($p = 1; $p <= $this->maxPage; $p++) {
 			if($p === $this->page) {
-				$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $p).'" class="active">'.$p.'</a></li>';
+				$html .= '	<li><a href="#" class="active">'.$p.'</a></li>';
 			} else {
 				$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $p).'">'.$p.'</a></li>';
 			}
 		}
 
-		$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $next).'"><img src="img/admin/next.png"/></a></li>';
-		$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $last).'"><img src="img/admin/last.png"/></a></li>';
+		if($this->page < $this->maxPage) {
+			$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $next).'"><img src="img/admin/next.png"/></a></li>';
+			$html .= '	<li><a href="'.$urlBase.'?'.$this->setVarQueryString('page', $last).'"><img src="img/admin/last.png"/></a></li>';
+		} else {
+			$html .= '	<li><a href="#" class="disabled"><img src="img/admin/next.png"/></a></li>';
+			$html .= '	<li><a href="#" class="disabled"><img src="img/admin/last.png"/></a></li>';
+		}
+
 		$html .= '</ul>';
 
 		return $html;

@@ -212,3 +212,7 @@ textarea:required:valid { /* when a field is considered valid by the browser */
 .error textarea {
 	border: 1px solid red;
 }
+
+.errors li, .error, .required {
+	color: #EC2121;
+}
