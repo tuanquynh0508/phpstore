@@ -181,18 +181,18 @@ textarea {
 	padding: 5px;
 	vertical-align: middle;
 }
-input:focus:invalid,
+/*input:focus:invalid,
 textarea:focus:invalid {
 	background: url(../img/admin/invalid.png) no-repeat 99% 50%;
     border-color: #b03535;
 	padding-right: 20px;
 }
 input:required:valid,
-textarea:required:valid { /* when a field is considered valid by the browser */
+textarea:required:valid {
     background: url(../img/admin/valid.png) no-repeat 99% 50%;
     border-color: #28921f;
 	padding-right: 20px;
-}
+}*/
 .input-sm {
 	width: 100px;
 }
@@ -205,14 +205,27 @@ textarea:required:valid { /* when a field is considered valid by the browser */
 .input-xs {
 	width: 50px;
 }
-.error input[type="text"],
-.error input[type="email"],
-.error input[type="url"],
-.error input[type="number"],
-.error textarea {
-	border: 1px solid red;
+.invalid {
+	background: url(../img/admin/invalid.png) no-repeat 99% 50%;
+    border-color: #b03535;
+	padding-right: 20px;
 }
-
-.errors li, .error, .required {
+.valid {
+	background: url(../img/admin/valid.png) no-repeat 99% 50%;
+    border-color: #28921f;
+	padding-right: 20px;
+}
+.error, .required {
+	color: #EC2121;
+}
+.errors {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+.errors li {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
 	color: #EC2121;
 }

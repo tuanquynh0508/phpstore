@@ -4,6 +4,10 @@ $('.btn-delete').click(function(e){
 	}
 });
 
-$('.error input').focus(function(){
-	$(this).closest('.error').removeClass('error');
+$('.valid').focus(function(){
+	$(this).removeClass('.valid').next('.errors').remove();
+});
+
+$('.invalid').keydown(function(){
+	$(this).removeClass('.invalid').next('.errors').remove();
 });

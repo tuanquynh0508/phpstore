@@ -6,6 +6,7 @@ use libs\classes\DBAccess;
 use libs\classes\FlashMessage;
 use libs\classes\DBPagination;
 use libs\classes\HttpException;
+use libs\classes\Validator;
 
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
@@ -21,14 +22,20 @@ $record->title = '';
 $record->slug = '';
 $record->is_active = 1;
 
-$formError = array();
-$fieldsRequired = array('title','slug');
-
 if(isset($_GET['id'])) {
 	$isAddNew = false;
 	$id = $_GET['id'];
 	$record = $oDBAccess->findOneById('category', $id);
 }
+
+$validates = array(
+	array('type'=>'required', 'field'=>'title', 'message'=>'Cần nhập Tiêu đề'),
+	array('type'=>'required', 'field'=>'slug', 'message'=>'Cần nhập Slug'),
+	array('type'=>'length', 'field'=>'title', 'min'=>3, 'max'=>255, 'message'=>'Độ dài Tiêu đề tối thiểu là 3, lớn nhất là 255 ký tự'),
+	array('type'=>'length', 'field'=>'slug', 'min'=>3, 'max'=>255, 'message'=>'Độ dài Slug tối thiểu là 3, lớn nhất là 255 ký tự'),
+	array('type'=>'unique','field'=>'slug','table'=>'category', 'message'=>'Slug này đã tồn tại trong hệ thống'),
+);
+$oValidator = new Validator($validates, $oDBAccess);
 
 //Check POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,15 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$attributes['is_active'] = 0;
 	}
 
-	//Validate input data
+	$oValidator->bindData($attributes);
+	//Bind input data to object
 	foreach($attributes as $key => $value){
 		$record->$key = $value;
-		if(in_array($key, $fieldsRequired) && empty($value)) {
-			$formError[$key] = "Cần nhập giá trị $key";
-		}
 	}
 
-	if(empty($formError)) {
+	if($oValidator->validate()) {
 		if($isAddNew) {
 			//Add Record
 			$attributes['created_at'] = date('Y-m-d H:i:s');
@@ -74,25 +79,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<input type="hidden" name="id" value="<?= $id ?>"/>
 	<?php endif; ?>
 
-	<?php if(!empty($formError)): ?>
-	<ul class="errors">
-		<?php foreach ($formError as $error): ?>
-		<li><?= $error ?></li>
-		<?php endforeach; ?>
-	</ul>
-	<?php endif; ?>
-
-	<div class="form-row clearfix error">
+	<div class="form-row clearfix">
 		<label class="form-label">Tiêu đề <span class="required">*</span>:</label>
 		<div class="form-control">
-			<input type="text" name="title" value="<?= $record->title ?>" class="input-md" required aria-required="true" minlength="3" maxlength="255"/>
+			<input type="text" name="title" value="<?= $record->title ?>" class="input-md <?= $oValidator->checkError('title')?'invalid':'valid' ?>"/>
+			<?= $oValidator->fieldError('title') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
 
 	<div class="form-row clearfix">
 		<label class="form-label">Slug <span class="required">*</span>:</label>
 		<div class="form-control">
-			<input type="text" name="slug" value="<?= $record->slug ?>" class="input-md" required aria-required="true"/>
+			<input type="text" name="slug" value="<?= $record->slug ?>" class="input-md <?= $oValidator->checkError('slug')?'invalid':'valid' ?>"/>
+			<?= $oValidator->fieldError('slug') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
 
