@@ -1,5 +1,5 @@
 /*
-SQLyog Ultimate v11.11 (32 bit)
+SQLyog Ultimate v11.11 (64 bit)
 MySQL - 5.5.43-0ubuntu0.14.04.1 : Database - phpstore
 *********************************************************************
 */
@@ -29,11 +29,11 @@ CREATE TABLE `category` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `category` */
 
-insert  into `category`(`id`,`title`,`slug`,`is_active`,`created_at`,`updated_at`) values (1,'Danh muc 1','1',1,'2015-09-19 09:26:24','2015-09-19 09:32:01'),(3,'Danh muc 2 A','2',0,'2015-09-19 09:33:27','2015-09-19 11:06:03'),(4,'Danh muc 3 A','3',1,'2015-09-19 09:33:27','2015-09-20 14:41:04'),(5,'Danh muc 10','4',1,'2015-09-19 09:33:27',NULL),(8,'Äiá»‡n thoáº¡i','5',1,'2015-09-19 10:22:48',NULL);
+insert  into `category`(`id`,`title`,`slug`,`is_active`,`created_at`,`updated_at`) values (1,'Vi xử lý CPU','cpu',1,'2015-09-23 10:00:48','2015-09-23 10:00:52'),(2,'Ram máy tính','ram',1,'2015-09-23 10:01:01','2015-09-23 16:09:17'),(3,'Bo mạch chủ','bo-mach-chu',1,'2015-09-23 10:01:10',NULL),(4,'Màn hình máy tính','man-hinh-may-tinh',0,'2015-09-23 14:54:57',NULL),(5,'Nguồn máy tính','nguon-may-tinh',0,'2015-09-23 14:55:06',NULL);
 
 /*Table structure for table `firm` */
 
@@ -45,11 +45,11 @@ CREATE TABLE `firm` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `firm` */
 
-insert  into `firm`(`id`,`title`,`created_at`,`updated_at`) values (1,'Sony ','2015-09-19 13:02:18','2015-09-19 13:02:59'),(2,'Deawoo','2015-09-19 13:02:35',NULL),(3,'Samsung','2015-09-19 13:02:44',NULL);
+insert  into `firm`(`id`,`title`,`created_at`,`updated_at`) values (1,'Intel','2015-09-23 17:45:52',NULL),(2,'Gigabyte','2015-09-23 17:46:03',NULL),(3,'Asus','2015-09-23 17:46:09',NULL),(4,'Sony','2015-09-23 17:46:18',NULL),(5,'HP','2015-09-23 17:46:37','2015-09-23 17:46:57');
 
 /*Table structure for table `order_product` */
 
@@ -108,13 +108,13 @@ CREATE TABLE `product` (
   UNIQUE KEY `slug` (`slug`),
   KEY `category_id` (`category_id`),
   KEY `firm_id` (`firm_id`),
-  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  CONSTRAINT `product_ibfk_2` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  CONSTRAINT `product_ibfk_2` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`),
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `product` */
 
-insert  into `product`(`id`,`title`,`slug`,`thumbnail`,`price`,`summary`,`content`,`is_active`,`created_at`,`updated_at`,`category_id`,`firm_id`) values (1,'Sáº£n pháº©m 1','1','IMac_G5_Rev._A_front.jpg',150000,'TÃ³m táº¯t vÃ­ dá»¥','Chi tiáº¿t sáº£n pháº£m 1',1,'2015-09-20 15:18:55','2015-09-20 15:35:44',3,2),(2,'Sáº£n pháº©m 2','2','336341-apple-imac-27-inch-intel-core-i5-4670-angle.jpg',0,'asfdsadf asdf asdf Ã¡d','fsda fasd fasdf adsf asd fads',1,'2015-09-20 15:44:46',NULL,1,3),(3,'iMac','3','1.jpg',0,'asdfasdfa sdfas d','fasd asdf safsad Ã¡d',1,'2015-09-20 15:45:13','2015-09-21 00:04:15',3,2),(4,'Iphone 4S','4','apple-iphone 5c - 8gb-white-450x350.png',0,'sadfa dfasd fdas fasd','sadfasdfasdfsaddfasd',1,'2015-09-20 15:45:33','2015-09-20 15:46:01',8,2),(5,'iphone 6','5','iPhone-5s-repair-services-same-day-London.jpg',0,'asdfa sdfas fas','fsadfas fsad',1,'2015-09-20 15:45:53',NULL,8,3);
+insert  into `product`(`id`,`title`,`slug`,`thumbnail`,`price`,`summary`,`content`,`is_active`,`created_at`,`updated_at`,`category_id`,`firm_id`) values (1,'Core i5','core-i5',NULL,2000000,'CPU Core i5','CPU Core i5 chi tiết',1,'2015-09-23 18:14:20','2015-09-23 18:14:40',1,1);
 
 /*Table structure for table `user` */
 

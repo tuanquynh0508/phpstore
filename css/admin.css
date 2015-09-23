@@ -194,7 +194,7 @@ p {
 	float: left;
 }
 
-input,
+input:not([type="file"]),
 textarea {
 	border: 1px solid #ccc;
 	padding: 5px;

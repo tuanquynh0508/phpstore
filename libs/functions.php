@@ -63,3 +63,33 @@ function slugify($str) {
 	
 	return $tmp;
 }
+
+function getCategoryList($condb) {
+    $list = array();
+    $sql = "SELECT * FROM category";
+    if($result = $condb->query($sql)) {
+        while($obj = $result->fetch_object()) {
+          $list[] = $obj;
+        }
+        $result->close();
+     } else {
+       throw new Exception($condb->error);
+     }
+     
+     return $list;
+}
+
+function getFirmList($condb) {
+    $list = array();
+    $sql = "SELECT * FROM firm";
+    if($result = $condb->query($sql)) {
+        while($obj = $result->fetch_object()) {
+          $list[] = $obj;
+        }
+        $result->close();
+     } else {
+       throw new Exception($condb->error);
+     }
+     
+     return $list;
+}
