@@ -59,7 +59,7 @@ $oValidator = new Validator($validates, $oDBAccess);
 //Xử lý khi có một POST form từ client lên
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$attributes = $_POST;
-	
+
 	if(!isset($attributes['is_active'])) {
 		$attributes['is_active'] = 0;
 	}
@@ -68,16 +68,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	foreach($attributes as $key => $value){
 		$record->$key = $value;
 	}
-	
+
+	//Upload file
+	$file = uploadFile('upload_file');
+	if($file != '') {
+		$attributes['thumbnail'] = $file;
+		$old = $record->thumbnail;
+		$record->thumbnail = $attributes['thumbnail'];
+		deleteFileUpload($old);
+	}
+
 	//Nếu slug là rỗng thì tạo slug từ title
 	if(!isset($attributes['slug'])) {
 		$attributes['slug'] = slugify($attributes['title']);
 		$record->slug = $attributes['slug'];
 	}
-	
+
 	//Đẩy giá trị vào cho đối tượng kiểm tra
 	$oValidator->bindData($attributes);
-	
+
 	//Nếu việc kiểm tra không có lỗi thì thực hiện ghi hoặc cập nhật dữ liệu vào database
 	if($oValidator->validate()) {
 		if($isAddNew) {
@@ -104,11 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php include "libs/includes/admin/flash_message.inc.php"; ?>
 
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
 	<?php if(!$isAddNew): ?>
 	<input type="hidden" name="id" value="<?= $id ?>"/>
 	<?php endif; ?>
-	
+
 	<div class="form-row clearfix">
 		<label class="form-label">Danh mục <span class="required">*</span>:</label>
 		<div class="form-control">
@@ -128,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<?= $oValidator->fieldError('category_id') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-	
+
 	<div class="form-row clearfix">
 		<label class="form-label">Hãng sản xuất <span class="required">*</span>:</label>
 		<div class="form-control">
@@ -148,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<?= $oValidator->fieldError('firm_id') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-	
+
 	<div class="form-row clearfix">
 		<label class="form-label">Tiêu đề <span class="required">*</span>:</label>
 		<div class="form-control">
@@ -156,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<?= $oValidator->fieldError('title') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-	
+
 	<?php if($record->slug != ''): ?>
 	<div class="form-row clearfix">
 		<label class="form-label">Slug <span class="required">*</span>:</label>
@@ -166,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		</div>
 	</div><!-- /.form-row clearfix -->
 	<?php endif; ?>
-	
+
 	<div class="form-row clearfix">
 		<label class="form-label">Tóm tắt:</label>
 		<div class="form-control">
@@ -174,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<?= $oValidator->fieldError('summary') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-	
+
 	<div class="form-row clearfix">
 		<label class="form-label">Chi tiết <span class="required">*</span>:</label>
 		<div class="form-control">
@@ -182,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<?= $oValidator->fieldError('content') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-	
+
 	<div class="form-row clearfix">
 		<label class="form-label">Giá:</label>
 		<div class="form-control">
@@ -190,12 +199,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<?= $oValidator->fieldError('price') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-	
+
 	<div class="form-row clearfix">
 		<label class="form-label">Ảnh sản phẩm:</label>
 		<div class="form-control">
-			<input type="file" name="thumbnail" value="" class="input-md <?= $oValidator->checkError('thumbnail')?'invalid':'' ?>"/>
-			<?= $oValidator->fieldError('thumbnail') ?>
+			<?php if($record->thumbnail !='' && file_exists(UPLOAD_DIR.$record->thumbnail)): ?>
+			<p><img src="<?= UPLOAD_DIR.'thumbs/'.$record->thumbnail ?>" height="80" /></p>
+			<?php endif; ?>
+			<input type="file" name="upload_file" value="" class="input-md <?= $oValidator->checkError('upload_file')?'invalid':'' ?>"/>
+			<?= $oValidator->fieldError('upload_file') ?>
+			<input type="hidden" name="thumbnail" value="<?= $record->thumbnail ?>"/>
 		</div>
 	</div><!-- /.form-row clearfix -->
 
