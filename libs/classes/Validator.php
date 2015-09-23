@@ -243,7 +243,7 @@ class Validator
 		$message = $prototype['message'];
 		$operator = $prototype['operator'];
 
-		if(eval("$value1 $operator $value2") === true) {
+		if(eval("return '$value1' $operator '$value2';") === false) {
 			$this->addError($field, $message);
 		}
 	}

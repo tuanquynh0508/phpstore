@@ -1,13 +1,14 @@
 $('.btn-delete').click(function(e){
-	if(confirm('Bạn có chắc chắn xóa không?') === false) {
-		e.preventDefault();
-	}
+    if(confirm('Bạn có chắc chắn xóa không?') === false) {
+        e.preventDefault();
+    }
 });
 
-$('.valid').focus(function(){
-	$(this).removeClass('.valid').next('.errors').remove();
+$('.valid').keypress(function(){
+    $(this).removeClass('valid');
 });
 
-$('.invalid').keydown(function(){
-	$(this).removeClass('.invalid').next('.errors').remove();
+$('.invalid').keypress(function(){
+    $(this).removeClass('invalid');
+	$(this).next('.errors').remove();
 });
