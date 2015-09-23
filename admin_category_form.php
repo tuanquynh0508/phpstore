@@ -1,33 +1,41 @@
 <?php
+//Gọi cấu hình, thư viện được sử dụng
 include 'libs/config.php';
 include 'libs/functions.php';
 
+//Khai báo các class sử dụng
 use libs\classes\DBAccess;
 use libs\classes\FlashMessage;
 use libs\classes\DBPagination;
 use libs\classes\HttpException;
 use libs\classes\Validator;
 
+//Tạo các đối tượng cần dùng
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
 
+//Khai báo tiêu đề và module cho page
 $pageAliasName = 'category';
 $pageTitle = 'Quản lý Danh mục';
 
 $isAddNew = true;
 $id = 0;
 
+//Khởi tạo đối tượng đầu tiên cho form, các trường của đối tượng là các trường của form
 $record = new stdClass();
 $record->title = '';
 $record->slug = '';
 $record->is_active = 1;
 
+//Kiểm tra xem id có tồn tại trên URL hay không, nếu tồn tại có nghĩa là form đang
+//ở trạng thái cập nhật. Còn không thì là trạng thái thêm mới
 if(isset($_GET['id'])) {
 	$isAddNew = false;
 	$id = $_GET['id'];
 	$record = $oDBAccess->findOneById('category', $id);
 }
 
+//Khai báo mảng danh sách kiểm tra
 $validates = array(
 	array('type'=>'required', 'field'=>'title', 'message'=>'Cần nhập Tiêu đề'),
 	array('type'=>'required', 'field'=>'slug', 'message'=>'Cần nhập Slug'),
@@ -37,30 +45,41 @@ $validates = array(
 );
 $oValidator = new Validator($validates, $oDBAccess);
 
-//Check POST
+//Xử lý khi có một POST form từ client lên
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$attributes = $_POST;
-
+	
 	if(!isset($attributes['is_active'])) {
 		$attributes['is_active'] = 0;
 	}
 
-	$oValidator->bindData($attributes);
-	//Bind input data to object
+	//Truyền lại giá trị cho đối tượng form
 	foreach($attributes as $key => $value){
 		$record->$key = $value;
 	}
-
+	
+	//Nếu slug là rỗng thì tạo slug từ title
+	if(!isset($attributes['slug'])) {
+		$attributes['slug'] = slugify($attributes['title']);
+		$record->slug = $attributes['slug'];
+	}
+	
+	//Đẩy giá trị vào cho đối tượng kiểm tra
+	$oValidator->bindData($attributes);
+	
+	//Nếu việc kiểm tra không có lỗi thì thực hiện ghi hoặc cập nhật dữ liệu vào database
 	if($oValidator->validate()) {
 		if($isAddNew) {
-			//Add Record
+			//Trường hợp thêm mới
 			$attributes['created_at'] = date('Y-m-d H:i:s');
 			$record = $oDBAccess->save('category', $attributes);
+			//Ghi flash message
 			$oFlashMessage->setFlashMessage('success', 'Thêm mới bản ghi thành công');
 		} else {
-			//Update Record
+			//Trường hợp cập nhật
 			$attributes['updated_at'] = date('Y-m-d H:i:s');
 			$record = $oDBAccess->save('category', $attributes, 'id');
+			//Ghi flash message
 			$oFlashMessage->setFlashMessage('success', 'Cập nhật bản ghi thành công');
 		}
 		header("Location: admin_{$pageAliasName}_form.php?id={$record->id}");
@@ -82,18 +101,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<div class="form-row clearfix">
 		<label class="form-label">Tiêu đề <span class="required">*</span>:</label>
 		<div class="form-control">
-			<input type="text" name="title" value="<?= $record->title ?>" class="input-md <?= $oValidator->checkError('title')?'invalid':'valid' ?>"/>
+			<input type="text" name="title" value="<?= $record->title ?>" class="input-md <?= $oValidator->checkError('title')?'invalid':'' ?>"/>
 			<?= $oValidator->fieldError('title') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-
+	
+	<?php if($record->slug != ''): ?>
 	<div class="form-row clearfix">
 		<label class="form-label">Slug <span class="required">*</span>:</label>
 		<div class="form-control">
-			<input type="text" name="slug" value="<?= $record->slug ?>" class="input-md <?= $oValidator->checkError('slug')?'invalid':'valid' ?>"/>
+			<input type="text" name="slug" value="<?= $record->slug ?>" class="input-md <?= $oValidator->checkError('slug')?'invalid':'' ?>"/>
 			<?= $oValidator->fieldError('slug') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
+	<?php endif; ?>
 
 	<div class="form-row clearfix">
 		<label class="form-label">Trạng thái:</label>

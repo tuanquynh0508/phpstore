@@ -1,3 +1,15 @@
+/**
+ * Admin style
+ *
+ * @author Nguyễn Như Tuấn <tuanquynh0508@gmail.com>
+ * @link https://github.com/tuanquynh0508/phpstore
+ * @copyright 2015 I-Designer
+ * @license https://github.com/tuanquynh0508/phpstore/license/
+ * @package css
+ * @since 1.0
+ */
+
+/* COMMON */
 * {
 	outline: 0;
 	box-sizing: border-box;
@@ -56,6 +68,7 @@ p {
 	margin: 0px auto;
 }
 
+/* DASHBOARD */
 #adminBoard {
 	border: 1px solid #ccc;
 }
@@ -84,6 +97,7 @@ p {
 	padding: 30px;
 }
 
+/* MENU TOP */
 #pageNav {
 	border-bottom: 1px solid #ccc;
 }
@@ -104,8 +118,9 @@ p {
 	line-height: 30px;
 	text-decoration: none;
 	color: #999;
-	padding: 0px 20px;
+	padding: 0px 10px;
 	text-transform: uppercase;
+	font-size: 11px;
 }
 #pageNav ul li.active a,
 #pageNav ul li a:hover {
@@ -128,6 +143,7 @@ p {
 	top: 15px;
 }
 
+/* PAGINATION LINK */
 .pagination-link ul {
 	list-style: none;
 	padding: 0px;
@@ -153,12 +169,15 @@ p {
 	color: red;
 }
 
+/* FLASH MESSAGE, ERROR, ALERT BOX */
 .alert-box {
 	color: green;
 }
 .error-box, .required {
 	color: red;
 }
+
+/* FORM */
 .form-row {
 	margin-bottom: 10px;
 }

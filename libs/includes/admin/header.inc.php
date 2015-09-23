@@ -1,3 +1,38 @@
+<?php
+/**
+ * Trả về HTML của menu
+ * 
+ * Ý tưởng: Hiển thị menu và đặt trạng thái active vào menu hiện tại theo danh sách
+ * các active mà người dùng định nghĩa
+ * 
+ * @return string
+ */
+function renderMenuTop() 
+{
+	$menus = array(
+		array('label' => 'Trang chủ', 'url' => 'admin.php', 'active' => array('admin.php')),
+		array('label' => 'Người dùng', 'url' => 'admin_user.php', 'active' => array('admin_user.php', 'admin_user_form.php')),
+		array('label' => 'Danh mục', 'url' => 'admin_category.php', 'active' => array('admin_category.php', 'admin_category_form.php')),
+		array('label' => 'Đối tác', 'url' => 'admin_firm.php', 'active' => array('admin_firm.php', 'admin_firm_form.php')),
+		array('label' => 'Sản phẩm', 'url' => 'admin_product.php', 'active' => array('admin_product.php', 'admin_product_form.php')),
+		array('label' => 'Đơn hàng', 'url' => 'admin_order.php', 'active' => array('admin_order.php', 'admin_order_detail.php')),
+	);
+	
+	$html = '<ul class="clearfix">';
+	foreach($menus as $menu) {
+		$active = '';
+		//Kiểm tra xem trang hiện tại có nằm trong danh sách active hay không, nếu
+		//nằm trong danh sách active thì thêm đặt class active cho menu
+		if(in_array(basename($_SERVER['PHP_SELF']), $menu['active'])) {
+			$active = 'class="active"';
+		}
+		$html .= '<li '.$active.'><a href="'.$menu['url'].'">'.$menu['label'].'</a></li>';
+	}
+	$html .= '</ul>';
+	
+	return $html;
+}
+?>
 <!doctype html>
 <html>
 <head>
@@ -18,15 +53,6 @@
 			</div>
 		</header>
 
-		<nav id="pageNav">
-			<ul class="clearfix">
-				<li class="active"><a href="admin.php">Trang chủ</a></li>
-				<li><a href="admin_user.php">Người dùng</a></li>
-				<li><a href="admin_category.php">Danh mục</a></li>
-				<li><a href="admin_firm.php">Đối tác</a></li>
-				<li><a href="admin_product.php">Sản phẩm</a></li>
-				<li><a href="admin_order.php">Đơn hàng</a></li>
-			</ul>
-		</nav>
+		<nav id="pageNav"><?= renderMenuTop() ?></nav>
 
 		<div id="pageBody">

@@ -1,45 +1,69 @@
 <?php
+//Gọi cấu hình, thư viện được sử dụng
 include 'libs/config.php';
 include 'libs/functions.php';
 
+//Khai báo các class sử dụng
 use libs\classes\DBAccess;
 use libs\classes\FlashMessage;
 use libs\classes\DBPagination;
 use libs\classes\HttpException;
 
+//Tạo các đối tượng cần dùng
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
 
+//Khai báo tiêu đề và module cho page
 $pageAliasName = 'category';
 $pageTitle = 'Quản lý Danh mục';
 
+//Kiểm tra xem biến keyword có trên đường link hay không
 $keyword = '';
 if(isset($_GET['keyword'])) {
 	$keyword = $_GET['keyword'];
 }
-
+//Tạo ra câu điều kiện theo keyword
 $where = '';
 if(!empty($keyword)) {
 $where = "WHERE title LIKE '%$keyword%' OR slug LIKE '%$keyword%'";
 }
 
-//Delete record
+//Thực hiện xử lý xóa bản ghi
 if(isset($_GET['action']) && isset($_GET['id']) && $_GET['action']=='delete'){
 	try {
-		$oDBAccess->deleteById('category', $_GET['id']);
-		$oFlashMessage->setFlashMessage('success', 'Đã xóa bản ghi có id là '.$_GET['id']);
+		$id = $_GET['id'];
+		$oDBAccess->deleteById('category', $id);
+		$oFlashMessage->setFlashMessage('success', 'Đã xóa bản ghi có id là '.$id);
 	} catch (HttpException $e) {
-		$oFlashMessage->setFlashMessage('error', "Không thể xóa bản ghi có id {$_GET['id']} được.");
+		$oFlashMessage->setFlashMessage('error', "Không thể xóa bản ghi có id $id được.");
 	}
 
 	header("Location: admin_$pageAliasName.php");
 	exit;
 }
 
-//Get total record for pagination
+//Thực hiện thay đổi trạng thái bản ghi
+if(isset($_GET['action']) && isset($_GET['id']) && $_GET['action']=='active'){
+	try {
+		$id = $_GET['id'];
+		$record = $oDBAccess->findOneById('category', $id);
+		$attributes['id'] = $id;
+		$attributes['is_active'] = ($record->is_active == 0)?1:0;
+		$record = $oDBAccess->save('category', $attributes, 'id');
+		$oFlashMessage->setFlashMessage('success', 'Cập nhật bản ghi có id là '.$id);
+	} catch (HttpException $e) {
+		$oFlashMessage->setFlashMessage('error', "Không thể cập nhật bản ghi có id $id được.");
+	}
+
+	header("Location: admin_$pageAliasName.php");
+	exit;
+}
+
+//Lấy ra tổng số bản ghi
 $totalRecord = intval($oDBAccess->scalarBySQL("SELECT COUNT(*) FROM category ".$where));
+//Tạo ra đối tượng phân trang
 $oDBPagination = new DBPagination($totalRecord, 10);
-//Get list
+//Lấy ra danh sách các bản ghi
 $list = $oDBAccess->findAllBySql("SELECT * FROM category $where ORDER BY created_at DESC {$oDBPagination->getLimit()}");
 ?>
 
