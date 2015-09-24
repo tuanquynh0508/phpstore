@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<div class="form-row clearfix">
 		<label class="form-label">Chi tiết <span class="required">*</span>:</label>
 		<div class="form-control">
-			<textarea name="content" rows="3" class="input-md <?= $oValidator->checkError('content')?'invalid':'' ?>"><?= $record->content ?></textarea>
+			<textarea id="content" name="content" rows="10" class="input-xlg <?= $oValidator->checkError('content')?'invalid':'' ?>"><?= $record->content ?></textarea>
 			<?= $oValidator->fieldError('content') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
@@ -270,4 +270,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		</div>
 	</div><!-- /.form-row clearfix -->
 </form>
+
+<?php
+$jsBlock = <<<JSBLOCK
+<script src="js/nicEdit/nicEdit.js"></script>
+<script>
+new nicEditor({
+	iconsPath : 'js/nicEdit/nicEditorIcons.gif',
+	buttonList : [
+		'bold','italic','underline','strikethrough',
+		'left','center','right','justify',
+		'subscript','superscript',
+		'ol','ul',
+		'indent','outdent',
+		'forecolor','bgcolor',
+		'removeformat',
+		'hr',
+		'image',
+		'link', 'unlink',
+		'fontSize', 'fontFormat', 'xhtml'
+	]
+}).panelInstance('content');
+</script>
+JSBLOCK;
+?>
+		
 <?php include 'libs/includes/admin/footer.inc.php'; ?>

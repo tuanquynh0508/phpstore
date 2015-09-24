@@ -276,7 +276,7 @@ class Validator
 		//Nếu độ dài giá trị của trường nhỏ hơn giá trị độ dài nhỏ nhất hoặc
 		//độ dài giá trị của trường lớn hơn giá trị độ dài lớn nhất
 		//thì thêm một lỗi vào danh sách lỗi
-		if(($min >  0 && strlen($value) < $min) || ($max >  0 && strlen($value) > $max)) {
+		if(($min >  0 && mb_strlen($value, 'UTF-8') < $min) || ($max >  0 && mb_strlen($value, 'UTF-8') > $max)) {
 			$this->addError($field, $message);
 		}
 	}

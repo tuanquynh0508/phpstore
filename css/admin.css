@@ -212,6 +212,9 @@ textarea:required:valid {
     border-color: #28921f;
 	padding-right: 20px;
 }*/
+.input-xs {
+	width: 50px;
+}
 .input-sm {
 	width: 100px;
 }
@@ -221,12 +224,16 @@ textarea:required:valid {
 .input-lg {
 	width: 450px;
 }
-.input-xs {
-	width: 50px;
+.input-xlg {
+	width: 600px;
+}
+.input-full {
+	display: block;
+	width: 100%;
 }
 .invalid {
 	background: url(../img/admin/invalid.png) no-repeat 99% 50%;
-    border-color: #b03535;
+    border: 1px solid #b03535 !important;
 	padding-right: 20px;
 }
 .valid {

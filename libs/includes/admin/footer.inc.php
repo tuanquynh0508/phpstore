@@ -8,5 +8,10 @@
 	<!-- jQuery -->
 	<script src="js/jquery-2.1.4.min.js"></script>
 	<script src="js/admin.js"></script>
+	<?php 
+		if(isset($jsBlock)) {
+			echo $jsBlock;
+		}
+	?>
 </body>
 </html>
