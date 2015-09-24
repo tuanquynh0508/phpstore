@@ -51,60 +51,70 @@ class Validator
 	 * đó như sau:
 	 * @var array
 	 */
-	//	$validates = array(
-	//		array(
-	//			'type' => 'required',
-	//			'field' => 'field 1',
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'length',
-	//			'field' => 'field 1',
-	//			'min' => 3,
-	//			'max' => 255,
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'string',
-	//			'field' => 'field 1',
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'email',
-	//			'field' => 'field 1',
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'url',
-	//			'field' => 'field 1',
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'number',
-	//			'field' => 'field 1',
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'unique',
-	//			'field' => 'field 1',
-	//			'table' => 'example',
-	//			'sql' => '',
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'pattern',
-	//			'field' => 'field 1',
-	//			'regex' => '',
-	//			'message' => 'message'
-	//		),
-	//		array(
-	//			'type' => 'compare',
-	//			'field' => 'field 1',
-	//			'value' => 'Value',
-	//			'operator' => '==',
-	//			'message' => 'message'
-	//		),
-	//	);
+	//$validates = array(
+	//	array(
+	//		'type' => 'required',
+	//		'field' => 'field 1',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'length',
+	//		'field' => 'field 1',
+	//		'min' => 3,
+	//		'max' => 255,
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'string',
+	//		'field' => 'field 1',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'email',
+	//		'field' => 'field 1',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'url',
+	//		'field' => 'field 1',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'number',
+	//		'field' => 'field 1',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'unique',
+	//		'field' => 'field 1',
+	//		'table' => 'example',
+	//		'sql' => '',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'pattern',
+	//		'field' => 'field 1',
+	//		'regex' => '',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'compare',
+	//		'field' => 'field 1',
+	//		'value' => 'Value',
+	//		'operator' => '==',
+	//		'message' => 'message'
+	//	),
+	//	array(
+	//		'type' => 'file',
+	//		'field' => 'field 1',
+	//		'required' => false,
+	//		'max_size' => 2097152, //2M
+	//		'extensions' => array('jpg', 'jpeg', 'png', 'gif', 'bmp'),
+	//		'message_required' => 'message',
+	//		'message_max' => 'message',
+	//		'message_ext' => 'message'
+	//	),
+	//);
     protected $validates = array();
 
 	/**
@@ -145,7 +155,9 @@ class Validator
             $callCheck = 'test'.ucfirst($prototype['type']);
 			//Kiểm tra xem function có trang class không. Nếu có thì gọi đến function
 			//tương ứng để kiểm tra dữ liệu. Các hàm kiểm tra được viết ở trong class này
-			if(method_exists($this, $callCheck)) {
+			if(method_exists($this, $callCheck) && 
+					(array_key_exists($prototype['field'], $this->attributes) || isset($_FILES[$prototype['field']]))
+			) {
 				$this->$callCheck($prototype);
 			}
         }
@@ -428,4 +440,92 @@ class Validator
 			$this->addError($field, $message);
 		}
 	}
+	
+	/**
+	 * Kiểm tra file
+	 * 
+	 * @param array $prototype
+	 */
+	protected function testFile($prototype)
+	{
+		//Tên trường
+		$field = $prototype['field'];
+		//Giá trị của trường
+		$fileUpload = $_FILES[$field];
+		//Yêu cầu nhập
+		$required = (isset($prototype['required']))?(bool)$prototype['required']:false;
+		//Kích thước lớn nhất của file
+		$maxSize = (isset($prototype['max_size']))?intval($prototype['max_size']):0;
+		//Danh sách các loại file hỗ trợ upload
+		$extensions = (isset($prototype['extensions']) && is_array($prototype['extensions']))?$prototype['extensions']:array();
+		$messageRequired = (isset($prototype['message_required']))?$prototype['message_required']:'';
+		$messageMax = (isset($prototype['message_max']))?$prototype['message_max']:'';
+		$messageExt = (isset($prototype['message_ext']))?$prototype['message_ext']:'';
+		
+		if($fileUpload['error'] == UPLOAD_ERR_OK) {
+			//Upload không có lỗi
+			//Lấy độ lớn file tải lên
+			$fileSize = $fileUpload['size'];
+			//Lấy phần mở rộng của file
+			$fileExt = strtolower(pathinfo($fileUpload['name'], PATHINFO_EXTENSION));
+			
+			//Nếu dung lượng của file tải lên lớn hơn dung lượng lớn nhất, thì thêm một lỗi vào danh sách lỗi
+			if($fileSize > $maxSize) {
+				$this->addError($field, $messageMax);
+			}
+			
+			//Nếu phần mở rộng của file tải lên không nằm trong danh sách cho phép
+			//, thì thêm một lỗi vào danh sách lỗi
+			if(!in_array($fileExt, $extensions)) {
+				$this->addError($field, $messageExt);
+			}
+		} elseif($fileUpload['error'] == UPLOAD_ERR_NO_FILE) {
+			//Không có file tải lên, mà lại yêu cầu nhập, thì thêm một lỗi vào danh sách lỗi
+			if($required == true) {
+				$this->addError($field, $messageRequired);
+			}
+		} else {
+			//Nếu error ngoài giá trị 0, 4. Thì thêm một lỗi vào danh sách lỗi
+			$this->addError($field, $this->uploadErrorCodeToMessage($fileUpload['error']));
+		}
+	}
+	
+	/**
+	 * Lấy nội dung lỗi từ mã lỗi upload
+	 * 
+	 * @param integer $code
+	 * @return string
+	 */
+	protected function uploadErrorCodeToMessage($code) 
+    { 
+        switch ($code) { 
+            case UPLOAD_ERR_INI_SIZE: 
+                $message = "Tập tin tải lên vượt quá dung lượng ".ini_get('upload_max_filesize')." quy định trong php.ini"; 
+                break; 
+            case UPLOAD_ERR_FORM_SIZE: 
+                $message = "Tập tin tải lên vượt quá dung lượng ".ini_get('post_max_size')." của post form quy định trong php.ini"; 
+                break; 
+            case UPLOAD_ERR_PARTIAL: 
+                $message = "Chỉ tải lên được một phần của tập tin"; 
+                break; 
+            case UPLOAD_ERR_NO_FILE: 
+                $message = "Không có tập tin được tải lên"; 
+                break; 
+            case UPLOAD_ERR_NO_TMP_DIR: 
+                $message = "Không tìm thấy thư mục tạm"; 
+                break; 
+            case UPLOAD_ERR_CANT_WRITE: 
+                $message = "Không thể ghi tập tin vào đĩa cứng"; 
+                break; 
+            case UPLOAD_ERR_EXTENSION: 
+                $message = "Tập tin tải lên bị lỗi"; 
+                break; 
+
+            default: 
+                $message = "Upload file bị lỗi"; 
+                break; 
+        } 
+		
+        return $message; 
+    }
 }

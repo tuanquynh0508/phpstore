@@ -138,14 +138,40 @@ function checkExistFile($file, $dir, $autoIncr = 0)
 }
 
 /**
- * Upload file
+ * Upload file Tài liệu khác
  *
  * @param string $field Tên trường upload
  * @return string Tên file upload thành công
  */
-function uploadFile($field)
+function uploadDocFile($field)
 {
-	if(isset($_FILES[$field])) {
+	if(isset($_FILES[$field]) && $_FILES[$field]['name'] != '') {
+		//Format lại tên file
+		$filePart = pathinfo($_FILES[$field]['name']);
+		$fileName = strtolower(slugify($filePart['filename']).'.'.$filePart['extension']);
+		//Kiểm tra xem file đã tồn tại chưa, nếu tồn tại rồi thì tự động truyền thêm hậu tố _<số tự tăng>
+		$fileName = checkExistFile($fileName, UPLOAD_DIR);
+
+		$tmp = $_FILES[$field]['tmp_name'];
+		//Di chuyển file vào thư mục tạm của upload
+        if(move_uploaded_file($tmp, UPLOAD_DIR.$fileName)) {
+
+			return $fileName;
+        }
+    }
+
+	return '';
+}
+
+/**
+ * Upload file Ảnh
+ *
+ * @param string $field Tên trường upload
+ * @return string Tên file upload thành công
+ */
+function uploadImgFile($field)
+{
+	if(isset($_FILES[$field]) && $_FILES[$field]['name'] != '') {
 		//Format lại tên file
 		$filePart = pathinfo($_FILES[$field]['name']);
 		$fileName = strtolower(slugify($filePart['filename']).'.'.$filePart['extension']);
@@ -170,21 +196,24 @@ function uploadFile($field)
 }
 
 /**
- *
+ * Hàm tạo thumbnail
+ * 
  * @param string $src
- * @param type $des
- * @param type $width
- * @param type $height
- * @param type $quality
+ * @param string $des
+ * @param integer $width
+ * @param integer $height
+ * @param integer $quality
  * @return boolean
  */
 function generateThumbnail($src, $des, $width, $height, $quality = 80)
 {
+	//File đích copy đến
 	$desFile = $des.pathinfo($src, PATHINFO_BASENAME);
-
+	
+	//Lấy phần mở rộng của file
 	$type = pathinfo($src, PATHINFO_EXTENSION);
 	if($type == 'jpeg') $type = 'jpg';
-
+	//Tạo đối tượng ảnh nguồn tùy theo loại ảnh
 	switch($type){
 	  case 'bmp': $source_image = imagecreatefromwbmp($src); break;
 	  case 'gif': $source_image = imagecreatefromgif($src); break;
@@ -192,32 +221,30 @@ function generateThumbnail($src, $des, $width, $height, $quality = 80)
 	  case 'png': $source_image = imagecreatefrompng($src); break;
 	  default : return false;
 	}
-
+	//Lấy kích thước gốc của ảnh
 	$originW = imagesx($source_image);
 	$originH = imagesy($source_image);
-
+	//Tính toán kích thước mới dựa trên kích thước gốc và kích thước muốn resize
 	$newW = $originW;
 	$newH = $originH;
 	if ($originW >= $width || $originH >= $height) {
+		//Tính tỷ lệ theo các chiều
 		if ($originW > 0) $ratioW = $width/$originW;
 		if ($originH > 0) $ratioH = $height/$originH;
-
+		//Lấy ra tỷ lệ bé nhất
 		if ($ratioW>$ratioH) {
 			$ratio=$ratioH;
 		} else {
 			$ratio=$ratioW;
 		}
-
+		//Tính kích thước ảnh theo tỷ lệ mới
 		$newW = intval($originW*$ratio);
 		$newH = intval($originH*$ratio);
 	}
-
-	/* copy source image at a resized size */
-	/* create a new, "virtual" image */
+	//Tạo file ảnh thumbnail theo kích thước mới
 	$virtual_image = imagecreatetruecolor($newW, $newH);
 	imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $newW, $newH, $originW, $originH);
-
-	/* create the physical thumbnail image to its destination */
+	//Ghi file ảnh thumbnail ra đĩa cứng
 	switch($type){
 	  case 'bmp': imagewbmp($virtual_image, $desFile); break;
 	  case 'gif': imagegif($virtual_image, $desFile); break;
@@ -229,13 +256,30 @@ function generateThumbnail($src, $des, $width, $height, $quality = 80)
 	return true;
 }
 
+/**
+ * Xóa file upload cùng với thumbnail
+ * 
+ * @param string $file
+ */
 function deleteFileUpload($file)
 {
+	//Xóa file
 	if($file !='' && file_exists(UPLOAD_DIR.$file)) {
 		unlink(UPLOAD_DIR.$file);
 	}
-
+	//Xóa file thumbnail
 	if($file !='' && file_exists(UPLOAD_DIR.'thumbs/'.$file)) {
 		unlink(UPLOAD_DIR.'thumbs/'.$file);
 	}
+}
+
+/**
+ * Format lại hiển thị tiền Việt
+ * 
+ * @param float $money
+ * @return type
+ */
+function vietnameseMoneyFormat($money, $symbol = '')
+{
+	return number_format($money, 0, '.', ',').' '.$symbol;
 }

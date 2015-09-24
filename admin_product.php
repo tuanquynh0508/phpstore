@@ -25,13 +25,17 @@ if(isset($_GET['keyword'])) {
 //Tạo ra câu điều kiện theo keyword
 $where = '';
 if(!empty($keyword)) {
-$where = "WHERE title LIKE '%$keyword%' OR slug LIKE '%$keyword%'";
+$where = "WHERE title LIKE '%$keyword%' OR slug LIKE '%$keyword%' OR summary LIKE '%$keyword%' OR content LIKE '%$keyword%'";
 }
 
 //Thực hiện xử lý xóa bản ghi
 if(isset($_GET['action']) && isset($_GET['id']) && $_GET['action']=='delete'){
 	try {
 		$id = $_GET['id'];
+		$record = $oDBAccess->findOneById('product', $id);
+		//Xóa file ảnh của sản phẩm đi
+		deleteFileUpload($record->thumbnail);
+		//Xóa sản phẩm
 		$oDBAccess->deleteById('product', $id);
 		$oFlashMessage->setFlashMessage('success', 'Đã xóa bản ghi có id là '.$id);
 	} catch (HttpException $e) {
@@ -49,6 +53,7 @@ if(isset($_GET['action']) && isset($_GET['id']) && $_GET['action']=='active'){
 		$record = $oDBAccess->findOneById('product', $id);
 		$attributes['id'] = $id;
 		$attributes['is_active'] = ($record->is_active == 0)?1:0;
+		$attributes['updated_at'] = date('Y-m-d H:i:s');
 		$record = $oDBAccess->save('product', $attributes, 'id');
 		$oFlashMessage->setFlashMessage('success', 'Cập nhật bản ghi có id là '.$id);
 	} catch (HttpException $e) {
@@ -87,8 +92,10 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM product $where ORDER BY created_
 	<thead>
 		<tr>
 			<th>#</th>
+			<th>Ảnh</th>
 			<th>Tiêu đề</th>
 			<th>Slug</th>
+			<th>Giá</th>
 			<th>Trạng thái</th>
 			<th>Thao tác</th>
 		</tr>
@@ -97,8 +104,14 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM product $where ORDER BY created_
 		<?php foreach ($list as $item): ?>
 		<tr>
 			<td><?= $item->id ?></td>
+			<td>
+				<?php if($item->thumbnail !='' && file_exists(UPLOAD_DIR.$item->thumbnail)): ?>
+				<img src="<?= UPLOAD_DIR.'thumbs/'.$item->thumbnail ?>" height="50" />
+				<?php endif; ?>
+			</td>
 			<td><a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><?= $item->title ?></a></td>
 			<td><?= $item->slug ?></td>
+			<td><?= vietnameseMoneyFormat($item->price) ?></td>
 			<td class="text-center"><?= renderActive($item, 'admin_'.$pageAliasName.'.php') ?></td>
 			<td class="text-center">
 				<a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><img src="img/admin/edit.png"/></a>

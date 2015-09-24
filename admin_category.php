@@ -49,6 +49,7 @@ if(isset($_GET['action']) && isset($_GET['id']) && $_GET['action']=='active'){
 		$record = $oDBAccess->findOneById('category', $id);
 		$attributes['id'] = $id;
 		$attributes['is_active'] = ($record->is_active == 0)?1:0;
+		$attributes['updated_at'] = date('Y-m-d H:i:s');
 		$record = $oDBAccess->save('category', $attributes, 'id');
 		$oFlashMessage->setFlashMessage('success', 'Cập nhật bản ghi có id là '.$id);
 	} catch (HttpException $e) {

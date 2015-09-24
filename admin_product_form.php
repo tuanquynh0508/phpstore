@@ -53,6 +53,12 @@ $validates = array(
 	array('type'=>'number', 'field'=>'price', 'message'=>'Giá phải là số'),
 	array('type'=>'required', 'field'=>'content', 'message'=>'Cần nhập Chi tiết'),
 	array('type'=>'length', 'field'=>'content', 'min'=>3, 'max'=>255, 'message'=>'Độ dài Chi tiết tối thiểu là 3, lớn nhất là 255 ký tự'),
+	array('type'=>'file', 'field'=>'upload_file', 'required'=>false, 'max_size'=>2097152, 
+		'extensions' => array('jpg', 'jpeg', 'png', 'gif'), 
+		'message_required'=>'Hãy nhập file',
+		'message_max'=>'Dung lượng file vượt quá 2M',
+		'message_ext'=>'Chỉ nhập file ảnh jpg, jpeg, png và gif',
+		),
 );
 $oValidator = new Validator($validates, $oDBAccess);
 
@@ -69,19 +75,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$record->$key = $value;
 	}
 
-	//Upload file
-	$file = uploadFile('upload_file');
-	if($file != '') {
-		$attributes['thumbnail'] = $file;
-		$old = $record->thumbnail;
-		$record->thumbnail = $attributes['thumbnail'];
-		deleteFileUpload($old);
-	}
-
 	//Nếu slug là rỗng thì tạo slug từ title
 	if(!isset($attributes['slug'])) {
 		$attributes['slug'] = slugify($attributes['title']);
 		$record->slug = $attributes['slug'];
+	}
+	
+	//Upload file
+	$fileNew = uploadImgFile('upload_file');
+	$fileOld = '';
+	if($fileNew != '') {
+		//Upload ảnh thành công, gán file ảnh mới cho thuộc tính thunbnail
+		$attributes['thumbnail'] = $fileNew;
+		$fileOld = $record->thumbnail;
+		$record->thumbnail = $fileNew;
 	}
 
 	//Đẩy giá trị vào cho đối tượng kiểm tra
@@ -89,6 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	//Nếu việc kiểm tra không có lỗi thì thực hiện ghi hoặc cập nhật dữ liệu vào database
 	if($oValidator->validate()) {
+		
+		//Xóa file ảnh cũ đi
+		deleteFileUpload($fileOld);
+		
 		if($isAddNew) {
 			//Trường hợp thêm mới
 			$attributes['created_at'] = date('Y-m-d H:i:s');
@@ -104,6 +115,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		}
 		header("Location: admin_{$pageAliasName}_form.php?id={$record->id}");
 		exit;
+	}
+	
+	//Nếu việc kiểm tra ảnh có lỗi
+	if($oValidator->checkError('upload_file')) {
+		$record->thumbnail = $fileOld;
+		//Xóa file ảnh lỗi đi
+		deleteFileUpload($fileNew);
 	}
 }
 ?>

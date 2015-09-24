@@ -1,6 +1,6 @@
 /*
-SQLyog Ultimate v11.11 (32 bit)
-MySQL - 5.5.43-0ubuntu0.14.04.1 : Database - phpstore
+SQLyog Ultimate v11.11 (64 bit)
+MySQL - 5.6.21 : Database - phpstore
 *********************************************************************
 */
 
@@ -45,11 +45,11 @@ CREATE TABLE `firm` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `firm` */
 
-insert  into `firm`(`id`,`title`,`created_at`,`updated_at`) values (1,'Intel','2015-09-23 17:45:52',NULL),(2,'Gigabyte','2015-09-23 17:46:03',NULL),(3,'Asus','2015-09-23 17:46:09',NULL),(4,'Sony','2015-09-23 17:46:18',NULL),(5,'HP','2015-09-23 17:46:37','2015-09-23 17:46:57');
+insert  into `firm`(`id`,`title`,`created_at`,`updated_at`) values (1,'Intel','2015-09-23 17:45:52',NULL),(2,'Gigabyte','2015-09-23 17:46:03',NULL),(3,'Asus','2015-09-23 17:46:09',NULL),(4,'Sony','2015-09-23 17:46:18',NULL),(5,'HP','2015-09-23 17:46:37','2015-09-23 17:46:57'),(6,'Kingmax','2015-09-24 10:43:08',NULL),(7,'Kingston','2015-09-24 10:43:18',NULL);
 
 /*Table structure for table `order_product` */
 
@@ -108,13 +108,13 @@ CREATE TABLE `product` (
   UNIQUE KEY `slug` (`slug`),
   KEY `category_id` (`category_id`),
   KEY `firm_id` (`firm_id`),
-  CONSTRAINT `product_ibfk_2` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`),
-  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  CONSTRAINT `product_ibfk_2` FOREIGN KEY (`firm_id`) REFERENCES `firm` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 /*Data for the table `product` */
 
-insert  into `product`(`id`,`title`,`slug`,`thumbnail`,`price`,`summary`,`content`,`is_active`,`created_at`,`updated_at`,`category_id`,`firm_id`) values (1,'Core i5','core-i5','81tnly3dtll-sl1500-.jpg',2200000,'CPU Core i5','CPU Core i5 chi tiết sản phẩm',1,'2015-09-23 18:14:20','2015-09-23 22:54:38',1,1),(2,'Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','bo-vi-xu-ly-intel-core-i5-4460--32ghz--6mb--sk1150','81tnly3dtll-sl1500--1.jpg',2500000,'Tóm tắt Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','Chi tiết Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150',1,'2015-09-23 22:56:59','2015-09-23 23:15:27',1,1),(3,'Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','bo-vi-xu-ly-core-i7-4790--4ghz--8mb--sk1150','micro-intel-core-i7-4790.jpg',7509000,'Tóm tắt Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','Chi tiết Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150',1,'2015-09-23 23:20:24',NULL,1,1);
+insert  into `product`(`id`,`title`,`slug`,`thumbnail`,`price`,`summary`,`content`,`is_active`,`created_at`,`updated_at`,`category_id`,`firm_id`) values (1,'Core i5','core-i5','81tnly3dtll-sl1500-.jpg',2200000,'CPU Core i5','CPU Core i5 chi tiết sản phẩm',1,'2015-09-23 18:14:20','2015-09-23 22:54:38',1,1),(2,'Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','bo-vi-xu-ly-intel-core-i5-4460--32ghz--6mb--sk1150','81tnly3dtll-sl1500--1.jpg',2500000,'Tóm tắt Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','Chi tiết Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150',1,'2015-09-23 22:56:59','2015-09-23 23:15:27',1,1),(3,'Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','bo-vi-xu-ly-core-i7-4790--4ghz--8mb--sk1150','micro-intel-core-i7-4790.jpg',7509000,'Tóm tắt Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','Chi tiết Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150',1,'2015-09-23 23:20:24',NULL,1,1),(8,'RAM Kingston Value 4GB DDR3 Bus 1600','ram-kingston-value-4gb-ddr3-bus-1600','ram-kingston-value-4gb-ddr3-bus-1600.jpg',559000,'Tóm tắt RAM Kingston Value 4GB DDR3 Bus 1600','Chi tiết RAM Kingston Value 4GB DDR3 Bus 1600 A',1,'2015-09-24 10:58:25','2015-09-24 11:15:44',2,7),(10,'Bo mạch chủ GIGABYTE™ GA H97M-D3H','bo-mach-chu-gigabyte-ga-h97m-d3h','bo-mach-chu-gigabyte-ga-h97m-d3h.jpg',2749000,'Bo mạch chủ GIGABYTE™ GA H97M-D3H','Bo mạch chủ GIGABYTE™ GA H97M-D3H',1,'2015-09-24 11:21:05','2015-09-24 11:25:47',3,2);
 
 /*Table structure for table `user` */
 
