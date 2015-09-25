@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v11.11 (64 bit)
-MySQL - 5.6.21 : Database - phpstore
+MySQL - 5.5.43-0ubuntu0.14.04.1 : Database - phpstore
 *********************************************************************
 */
 
@@ -114,7 +114,7 @@ CREATE TABLE `product` (
 
 /*Data for the table `product` */
 
-insert  into `product`(`id`,`title`,`slug`,`thumbnail`,`price`,`summary`,`content`,`is_active`,`created_at`,`updated_at`,`category_id`,`firm_id`) values (1,'Core i5','core-i5','81tnly3dtll-sl1500-.jpg',2200000,'CPU Core i5','CPU Core i5 chi tiết sản phẩm',1,'2015-09-23 18:14:20','2015-09-23 22:54:38',1,1),(2,'Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','bo-vi-xu-ly-intel-core-i5-4460--32ghz--6mb--sk1150','81tnly3dtll-sl1500--1.jpg',2500000,'Tóm tắt Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','Chi tiết Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150',1,'2015-09-23 22:56:59','2015-09-23 23:15:27',1,1),(3,'Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','bo-vi-xu-ly-core-i7-4790--4ghz--8mb--sk1150','micro-intel-core-i7-4790.jpg',7509000,'Tóm tắt Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','Chi tiết Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150',1,'2015-09-23 23:20:24',NULL,1,1),(8,'RAM Kingston Value 4GB DDR3 Bus 1600','ram-kingston-value-4gb-ddr3-bus-1600','ram-kingston-value-4gb-ddr3-bus-1600.jpg',559000,'Tóm tắt RAM Kingston Value 4GB DDR3 Bus 1600','Chi tiết RAM Kingston Value 4GB DDR3 Bus 1600 A',1,'2015-09-24 10:58:25','2015-09-24 11:15:44',2,7),(10,'Bo mạch chủ GIGABYTE™ GA H97M-D3H','bo-mach-chu-gigabyte-ga-h97m-d3h','bo-mach-chu-gigabyte-ga-h97m-d3h.jpg',2749000,'Bo mạch chủ GIGABYTE™ GA H97M-D3H','Bo mạch chủ GIGABYTE™ GA H97M-D3H',1,'2015-09-24 11:21:05','2015-09-24 11:25:47',3,2);
+insert  into `product`(`id`,`title`,`slug`,`thumbnail`,`price`,`summary`,`content`,`is_active`,`created_at`,`updated_at`,`category_id`,`firm_id`) values (1,'Core i5','core-i5','81tnly3dtll-sl1500-.jpg',2200000,'CPU Core i5','CPU Core i5 chi tiết sản phẩm',1,'2015-09-23 18:14:20','2015-09-23 22:54:38',1,1),(2,'Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','bo-vi-xu-ly-intel-core-i5-4460--32ghz--6mb--sk1150','81tnly3dtll-sl1500--1.jpg',2500000,'Tóm tắt Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150','Chi tiết Bộ vi xử lý Intel Core i5 4460 / 3,2GHz / 6MB / Sk1150',1,'2015-09-23 22:56:59','2015-09-23 23:15:27',1,1),(3,'Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','bo-vi-xu-ly-core-i7-4790--4ghz--8mb--sk1150','micro-intel-core-i7-4790.jpg',7509000,'Tóm tắt Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150','Chi tiết Bộ vi xử lý Core i7 4790 / 4Ghz / 8MB / SK1150',1,'2015-09-23 23:20:24',NULL,1,1),(8,'RAM Kingston Value 4GB DDR3 Bus 1600','ram-kingston-value-4gb-ddr3-bus-1600','ram-kingston-value-4gb-ddr3-bus-1600.jpg',559000,'Tóm tắt RAM Kingston Value 4GB DDR3 Bus 1600','Chi tiết RAM Kingston Value 4GB DDR3 Bus 1600 A',1,'2015-09-24 10:58:25','2015-09-24 11:15:44',2,7),(10,'Bo mạch chủ GIGABYTE™ GA H97M-D3H','bo-mach-chu-gigabyte-ga-h97m-d3h','bo-mach-chu-gigabyte-ga-h97m-d3h.jpg',2749000,'Bo mạch chủ GIGABYTE™ GA H97M-D3H','Bo mạch chủ GIGABYTE™ GA H97M-<b><font color=\"#0000cc\">D3H</font></b>',1,'2015-09-24 11:21:05','2015-09-24 09:21:48',3,2);
 
 /*Table structure for table `user` */
 
@@ -122,11 +122,12 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) DEFAULT NULL,
-  `passwd` varchar(255) DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
+  `passwd` varchar(255) NOT NULL,
+  `fullname` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `is_admin` tinyint(1) DEFAULT '0',
   `is_active` tinyint(1) DEFAULT '1',
-  `fullname` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
