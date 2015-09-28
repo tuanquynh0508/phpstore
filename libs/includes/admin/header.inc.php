@@ -1,23 +1,26 @@
 <?php
 /**
  * Trả về HTML của menu
- * 
+ *
  * Ý tưởng: Hiển thị menu và đặt trạng thái active vào menu hiện tại theo danh sách
  * các active mà người dùng định nghĩa
- * 
+ *
  * @return string
  */
-function renderMenuTop() 
+function renderMenuTop()
 {
 	$menus = array(
 		array('label' => 'Trang chủ', 'url' => 'admin.php', 'active' => array('admin.php')),
-		array('label' => 'Người dùng', 'url' => 'admin_user.php', 'active' => array('admin_user.php', 'admin_user_form.php')),
 		array('label' => 'Danh mục', 'url' => 'admin_category.php', 'active' => array('admin_category.php', 'admin_category_form.php')),
 		array('label' => 'Đối tác', 'url' => 'admin_firm.php', 'active' => array('admin_firm.php', 'admin_firm_form.php')),
 		array('label' => 'Sản phẩm', 'url' => 'admin_product.php', 'active' => array('admin_product.php', 'admin_product_form.php')),
 		array('label' => 'Đơn hàng', 'url' => 'admin_order.php', 'active' => array('admin_order.php', 'admin_order_detail.php')),
 	);
-	
+
+	if(getUserAttrSession('is_admin') == 1) {
+		$menus[] = array('label' => 'Người dùng', 'url' => 'admin_user.php', 'active' => array('admin_user.php', 'admin_user_form.php'));
+	}
+
 	$html = '<ul class="clearfix">';
 	foreach($menus as $menu) {
 		$active = '';
@@ -29,7 +32,7 @@ function renderMenuTop()
 		$html .= '<li '.$active.'><a href="'.$menu['url'].'">'.$menu['label'].'</a></li>';
 	}
 	$html .= '</ul>';
-	
+
 	return $html;
 }
 ?>
@@ -48,11 +51,16 @@ function renderMenuTop()
 	<div class="wrapper" id="adminBoard">
 		<header id="pageHeader">
 			<h1>PHPStore Administrator Page</h1>
+			<?php if(checkAuthentication()): ?>
 			<div id="userBox">
-				Hello Admin!. [<a href="#">Đổi mật khẩu</a> | <a href="#">Thoát</a>]
+				Xin chào <?= getUserAttrSession('fullname') ?>!.
+				[<a href="admin_profile.php">Hồ sơ</a> | <a href="admin_logout.php">Thoát</a>]
 			</div>
+			<?php endif; ?>
 		</header>
 
+		<?php if(checkAuthentication()): ?>
 		<nav id="pageNav"><?= renderMenuTop() ?></nav>
+		<?php endif; ?>
 
 		<div id="pageBody">

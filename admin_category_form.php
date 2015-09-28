@@ -10,6 +10,12 @@ use libs\classes\DBPagination;
 use libs\classes\HttpException;
 use libs\classes\Validator;
 
+//Kiểm tra đăng nhập, chưa đăng nhập thì chuyển đến trang đăng nhập
+if(!checkAuthentication()) {
+	header("Location: admin_login.php");
+	exit;
+}
+
 //Tạo các đối tượng cần dùng
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
@@ -48,7 +54,7 @@ $oValidator = new Validator($validates, $oDBAccess);
 //Xử lý khi có một POST form từ client lên
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$attributes = $_POST;
-	
+
 	if(!isset($attributes['is_active'])) {
 		$attributes['is_active'] = 0;
 	}
@@ -57,16 +63,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	foreach($attributes as $key => $value){
 		$record->$key = $value;
 	}
-	
+
 	//Nếu slug là rỗng thì tạo slug từ title
 	if(!isset($attributes['slug'])) {
 		$attributes['slug'] = slugify($attributes['title']);
 		$record->slug = $attributes['slug'];
 	}
-	
+
 	//Đẩy giá trị vào cho đối tượng kiểm tra
 	$oValidator->bindData($attributes);
-	
+
 	//Nếu việc kiểm tra không có lỗi thì thực hiện ghi hoặc cập nhật dữ liệu vào database
 	if($oValidator->validate()) {
 		if($isAddNew) {
@@ -105,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<?= $oValidator->fieldError('title') ?>
 		</div>
 	</div><!-- /.form-row clearfix -->
-	
+
 	<?php if($record->slug != ''): ?>
 	<div class="form-row clearfix">
 		<label class="form-label">Slug <span class="required">*</span>:</label>

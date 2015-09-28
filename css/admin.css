@@ -255,3 +255,10 @@ textarea:required:valid {
 	padding: 0px;
 	color: #EC2121;
 }
+
+.help-block {
+	display: block;
+	margin: 5px 0px;
+	font-size: 12px;
+	color: #999;
+}

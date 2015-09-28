@@ -197,7 +197,7 @@ function uploadImgFile($field)
 
 /**
  * Hàm tạo thumbnail
- * 
+ *
  * @param string $src
  * @param string $des
  * @param integer $width
@@ -209,7 +209,7 @@ function generateThumbnail($src, $des, $width, $height, $quality = 80)
 {
 	//File đích copy đến
 	$desFile = $des.pathinfo($src, PATHINFO_BASENAME);
-	
+
 	//Lấy phần mở rộng của file
 	$type = pathinfo($src, PATHINFO_EXTENSION);
 	if($type == 'jpeg') $type = 'jpg';
@@ -258,7 +258,7 @@ function generateThumbnail($src, $des, $width, $height, $quality = 80)
 
 /**
  * Xóa file upload cùng với thumbnail
- * 
+ *
  * @param string $file
  */
 function deleteFileUpload($file)
@@ -275,11 +275,88 @@ function deleteFileUpload($file)
 
 /**
  * Format lại hiển thị tiền Việt
- * 
+ *
  * @param float $money
  * @return type
  */
 function vietnameseMoneyFormat($money, $symbol = '')
 {
 	return number_format($money, 0, '.', ',').' '.$symbol;
+}
+
+/**
+ * Kiểm tra xem đã đăng nhập chưa
+ *
+ * @return boolean
+ */
+function checkAuthentication() {
+	$user = getUserSession();
+
+	if(null != $user) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Lưu trữ user vào session
+ *
+ * @param stdClass $user
+ */
+function setUserSession($user) {
+	$_SESSION['user'] = $user;
+}
+
+/**
+ * Trả về user được lưu trong session
+ *
+ * @return stdClass
+ */
+function getUserSession() {
+	if(!isset($_SESSION['user'])) {
+		$_SESSION['user'] = null;
+	}
+
+	$user = $_SESSION['user'];
+
+	if( null != $user) {
+		return $user;
+	}
+
+	return null;
+}
+
+/**
+ * Xóa user trong biến session đi
+ */
+function removeUserSession() {
+	unset($_SESSION['user']);
+}
+
+/**
+ * Gán giá trị cho trường của user trong session
+ *
+ * @param string $key
+ * @param string $value
+ */
+function setUserAttrSession($key, $value) {
+	if($user = $_SESSION['user']) {
+		$user->$key = $value;
+		$_SESSION['user'] = $user;
+	}
+}
+
+/**
+ * Lấy thông tin từ một trường của user session
+ *
+ * @param string $key
+ * @return string
+ */
+function getUserAttrSession($key) {
+	if($user = $_SESSION['user']) {
+		return $user->$key;
+	}
+
+	return '';
 }

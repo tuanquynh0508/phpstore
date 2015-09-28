@@ -9,6 +9,18 @@ use libs\classes\FlashMessage;
 use libs\classes\DBPagination;
 use libs\classes\HttpException;
 
+//Kiểm tra đăng nhập, chưa đăng nhập thì chuyển đến trang đăng nhập
+if(!checkAuthentication()) {
+	header("Location: admin_login.php");
+	exit;
+}
+
+//Kiểm tra xem có phải là super admin không
+if(getUserAttrSession('is_admin') != 1) {
+	header("Location: admin.php");
+	exit;
+}
+
 //Tạo các đối tượng cần dùng
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
@@ -103,7 +115,11 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM user $where ORDER BY created_at 
 			<td><a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><?= $item->fullname ?></a></td>
 			<td><?= $item->username ?></td>
 			<td><?= $item->email ?></td>
-			<td><?= $item->is_admin ?></td>
+			<td class="text-center">
+				<?php if($item->is_admin == 1): ?>
+				<img src="img/admin/admin.png">
+				<?php endif; ?>
+			</td>
 			<td class="text-center"><?= renderActive($item, 'admin_'.$pageAliasName.'.php') ?></td>
 			<td class="text-center">
 				<a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><img src="img/admin/edit.png"/></a>

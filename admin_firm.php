@@ -9,6 +9,12 @@ use libs\classes\FlashMessage;
 use libs\classes\DBPagination;
 use libs\classes\HttpException;
 
+//Kiểm tra đăng nhập, chưa đăng nhập thì chuyển đến trang đăng nhập
+if(!checkAuthentication()) {
+	header("Location: admin_login.php");
+	exit;
+}
+
 //Tạo các đối tượng cần dùng
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
@@ -78,7 +84,7 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM firm $where ORDER BY created_at 
 		<?php foreach ($list as $item): ?>
 		<tr>
 			<td><?= $item->id ?></td>
-			<td><a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><?= $item->title ?></a></td>			
+			<td><a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><?= $item->title ?></a></td>
 			<td class="text-center">
 				<a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><img src="img/admin/edit.png"/></a>
 				<a href="admin_<?= $pageAliasName ?>.php?action=delete&id=<?= $item->id ?>" class="btn-delete"><img src="img/admin/trash.png"/></a>

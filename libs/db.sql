@@ -1,5 +1,5 @@
 /*
-SQLyog Ultimate v11.11 (64 bit)
+SQLyog Ultimate v11.11 (32 bit)
 MySQL - 5.5.43-0ubuntu0.14.04.1 : Database - phpstore
 *********************************************************************
 */
@@ -133,9 +133,11 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user` */
+
+insert  into `user`(`id`,`username`,`passwd`,`fullname`,`email`,`is_admin`,`is_active`,`created_at`,`updated_at`) values (1,'admin','e10adc3949ba59abbe56e057f20f883e','Nguyễn Như Tuấn','tuanquynh0508@gmail.com',1,1,'2015-09-25 23:26:58','2015-09-28 22:25:04'),(2,'editor','e10adc3949ba59abbe56e057f20f883e','Nhập liệu','editor@gmail.com',0,1,'2015-09-28 22:04:06',NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

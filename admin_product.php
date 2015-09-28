@@ -9,6 +9,12 @@ use libs\classes\FlashMessage;
 use libs\classes\DBPagination;
 use libs\classes\HttpException;
 
+//Kiểm tra đăng nhập, chưa đăng nhập thì chuyển đến trang đăng nhập
+if(!checkAuthentication()) {
+	header("Location: admin_login.php");
+	exit;
+}
+
 //Tạo các đối tượng cần dùng
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();

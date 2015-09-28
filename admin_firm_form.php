@@ -10,6 +10,12 @@ use libs\classes\DBPagination;
 use libs\classes\HttpException;
 use libs\classes\Validator;
 
+//Kiểm tra đăng nhập, chưa đăng nhập thì chuyển đến trang đăng nhập
+if(!checkAuthentication()) {
+	header("Location: admin_login.php");
+	exit;
+}
+
 //Tạo các đối tượng cần dùng
 $oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
@@ -42,16 +48,16 @@ $oValidator = new Validator($validates, $oDBAccess);
 
 //Xử lý khi có một POST form từ client lên
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$attributes = $_POST;	
+	$attributes = $_POST;
 
 	//Truyền lại giá trị cho đối tượng form
 	foreach($attributes as $key => $value){
 		$record->$key = $value;
 	}
-	
+
 	//Đẩy giá trị vào cho đối tượng kiểm tra
 	$oValidator->bindData($attributes);
-	
+
 	//Nếu việc kiểm tra không có lỗi thì thực hiện ghi hoặc cập nhật dữ liệu vào database
 	if($oValidator->validate()) {
 		if($isAddNew) {
