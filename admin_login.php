@@ -60,6 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		if(null === $user) {
 			$oValidator->addError('username', 'Tài khoản này không tồn tại');
+		} elseif($user->is_active == 0) {
+			$oValidator->addError('username', 'Tài khoản này đang bị khóa');
 		} elseif($user->passwd != generateUserPassword($record->username, $record->password)) {
 			$oValidator->addError('password', 'Nhập sai mật khẩu');
 		}
