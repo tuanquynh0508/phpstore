@@ -29,7 +29,7 @@ $record->email = '';
 
 //Khai báo mảng danh sách kiểm tra
 $validates = array(
-	array('type'=>'required', 'field'=>'email', 'message'=>'Cần nhập Tài khoản'),
+	array('type'=>'required', 'field'=>'email', 'message'=>'Cần nhập Email'),
 	array('type'=>'email', 'field'=>'email', 'message'=>'Sai định dạng email'),
 );
 $oValidator = new Validator($validates, $oDBAccess);
@@ -47,17 +47,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$record->$key = $value;
 	}
 
-	if($record->username != '') {
+	if($record->email != '') {
 		$sql= "SELECT * FROM user WHERE email='".$oDBAccess->real_escape_string($record->email)."'";
 		if ($result = $oDBAccess->query($sql)) {
 			//Trả về kết quả dưới dạng object
-			$user = $result->fetch_object();
+			$record = $result->fetch_object();
 			$result->close();
 		} else {
 			throw new HttpException($oDBAccess->error, 500);
 		}
 
-		if(null === $user) {
+		if(null === $record) {
 			$oValidator->addError('email', 'Email này không tồn tại');
 		}
 	}
@@ -70,14 +70,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		unset($attributes['email']);
 		$attributes['id'] = $record->id;
+		
+		$attributes['reset_token'] = generateUserResetToken($record->username);
+		$attributes['reset_timeout'] = time();
+		
 		//Trường hợp cập nhật
 		$attributes['updated_at'] = date('Y-m-d H:i:s');
 		$record = $oDBAccess->save('user', $attributes, 'id');
-		setUserSession($record);
-		//Ghi flash message
-		$oFlashMessage->setFlashMessage('success', 'Cập nhật hồ sơ thành công');
+		
+		//Send email
+		$subject = "Xác nhận thay đổi mật khẩu từ ".APP_NAME;
+		$filename = __DIR__.'/libs/templates/email/reset_password.html';
+		$params = array(
+			'fullname' => $record->fullname,
+			'app_name' => APP_NAME,
+			'link' => APP_URL.'admin_confirm_password.php?token='.$attributes['reset_token'],
+		);
+		$body = getTemplate($filename, $params);
+		sendEmail($record->email, $subject, $body, WEBMASTER_EMAIL, WEBMASTER_NAME);
 
-		header("Location: admin.php");
+		//Ghi flash message
+		$oFlashMessage->setFlashMessage('success', 'Hệ thống đã gửi một email đến hòm thư của bạn. Hãy kiểm tra email và bấm vào link xác nhận thay đổi mật khẩu.');
+
+		header("Location: admin_forgot_password.php");
 		exit;
 	}
 }
@@ -95,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<div class="form-control">
 			<input type="text" name="email" value="<?= $record->email ?>" class="input-md <?= $oValidator->checkError('email')?'invalid':'' ?>"/>
 			<?= $oValidator->fieldError('email') ?>
+			<span class="help-block">Hãy nhập email của bạn để lấy lại mật khẩu.</span>
 		</div>
 	</div><!-- /.form-row clearfix -->
 

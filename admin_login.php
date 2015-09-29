@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		if(null === $user) {
 			$oValidator->addError('username', 'Tài khoản này không tồn tại');
-		} elseif($user->passwd != md5($record->password)) {
+		} elseif($user->passwd != generateUserPassword($record->username, $record->password)) {
 			$oValidator->addError('password', 'Nhập sai mật khẩu');
 		}
 	}

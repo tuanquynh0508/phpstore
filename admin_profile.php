@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	//Nếu việc kiểm tra không có lỗi thì thực hiện ghi hoặc cập nhật dữ liệu vào database
 	if($oValidator->validate()) {
 		if(trim($attributes['passwd']) != '') {
-			$attributes['passwd'] = md5($attributes['passwd']);
+			$attributes['passwd'] = generateUserPassword($record->username, $attributes['passwd']);
 		} else {
 			unset($attributes['passwd']);
 		}

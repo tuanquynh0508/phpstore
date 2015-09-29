@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+define("APP_NAME", "PHPStore");
+define("APP_URL", "http://localhost/phpstore/");
+define("WEBMASTER_EMAIL", 'tuanquynh0508@gmail.com');
+define("WEBMASTER_NAME", 'Web Master');
+
+//Mã bí mật
+define("SECRET_CODE", "phpstoresecretcodeabc123");
+
 //Cấu hình database
 define("DB_HOST", "localhost");
 define("DB_NAME", "phpstore");
