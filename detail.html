@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PHPStore</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/reset.css" rel="stylesheet" type="text/css"/>
+		<link href="css/frontend-ver-1.css" rel="stylesheet" type="text/css"/>
+		<link href="js/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
+		<!--[if lt IE 9]>
+			<script src="js/html5shiv.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="wrapper">
+
+			<header>
+				<a href="index.php" id="branchLogo"><span>PHPStore</span></a>
+				<div id="shoppingCart"><a href="#">Giỏ hàng có 2 sản phẩm</a></div>
+			</header><!-- /header -->
+
+			<nav id="topMenu">
+				<ul class="clearfix">
+					<li class="active"><a href="index.php">Trang chủ</a></li>
+					<li><a href="index.php">Giới thiệu</a></li>
+					<li><a href="index.php">Sản phẩm</a></li>
+					<li><a href="index.php">Liên hệ</a></li>
+				</ul>
+			</nav><!-- /#topMenu -->
+
+			<section id="bodyPage" class="clearfix">
+
+				<section id="leftPage">
+					<nav id="leftMenu">
+						<ul>
+							<li class="active"><a href="index.php">Danh mục 1</a></li>
+							<li><a href="index.php">Danh mục 2</a></li>
+							<li><a href="index.php">Danh mục 3</a></li>
+							<li><a href="index.php">Danh mục 3</a></li>
+						</ul>
+					</nav><!-- /#topMenu -->
+				</section><!-- /#leftPage -->
+
+				<section id="rightPage">
+					<div class="product-summary-box clearfix">
+						<div class="pull-left">
+							<p><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></p>
+							<p><a href="uploads/micro-intel-core-i7-4790.jpg" class="fancybox"><img src="img/frontend/zoom.png"> Xem ảnh lớn</a></p>
+						</div>
+						<div class="pull-right">
+							<h1>Tên sản phẩm</h1>
+							<p>Mã sản phẩm: 1</p>
+							<p>Danh mục: 1</p>
+							<p>Hãng sản xuất: 1</p>
+							<p class="price">Giá: 3000 VND</p>
+							<p>
+								Số lượng: <input type="number" value="1" class="product-quantity"/>
+								<button class="btn-add-cart">Mua sản phẩm</button>
+							</p>
+						</div>
+					</div><!-- /.product-summary-box -->
+					
+					<div class="product-detail-box">
+						<ul class="tab-title clearfix">
+							<li class="active"><a href="#detailTab">Chi tiết</a></li>
+							<li><a href="#reviewTab">Đánh giá người dùng</a></li>
+						</ul>
+						<div class="tab-content">
+							
+							<div class="tab-item active" id="detailTab">
+								Chi tiết
+							</div><!-- /.tab-item -->
+							
+							<div class="tab-item" id="reviewTab">
+								Đánh giá người dùng
+							</div><!-- /.tab-item -->
+							
+						</div><!-- /.tab-content -->
+					</div><!-- /.product-detail-box -->
+					
+					<h2>Các sản phẩm đã xem</h2>
+					<hr/>
+					<div class="category">
+						<div class="clearfix">
+							<div class="product-item">
+								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
+								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
+								<p class="price">3.000 VND</p>
+								<button class="btn-add-cart">Mua sản phẩm</button>
+							</div><!-- /.product-item -->
+							<div class="product-item">
+								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
+								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
+								<p class="price">3.000 VND</p>
+								<button class="btn-add-cart">Mua sản phẩm</button>
+							</div><!-- /.product-item -->
+							<div class="product-item">
+								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
+								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
+								<p class="price">3.000 VND</p>
+								<button class="btn-add-cart">Mua sản phẩm</button>
+							</div><!-- /.product-item -->
+							<div class="product-item">
+								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
+								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
+								<p class="price">3.000 VND</p>
+								<button class="btn-add-cart">Mua sản phẩm</button>
+							</div><!-- /.product-item -->
+						</div>
+					</div><!-- /.category -->
+
+				</section><!-- /#rightPage -->
+
+			</section><!-- /#bodyPage -->
+
+			<footer>
+				<p>&copy; <?= date('Y') ?> I-Designer.Net</p>
+			</footer><!-- /footer -->
+
+		</div><!-- /.wrapper -->
+
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/jquery.matchHeight-min.js"></script>
+		<script src="js/fancybox/jquery.fancybox.pack.js"></script>
+		<script src="js/frontend-ver-1.js"></script>
+	</body>
+</html>
+
