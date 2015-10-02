@@ -139,7 +139,7 @@ CREATE TABLE `user` (
 
 /*Data for the table `user` */
 
-insert  into `user`(`id`,`username`,`passwd`,`fullname`,`email`,`is_admin`,`is_active`,`reset_token`,`reset_timeout`,`created_at`,`updated_at`) values (1,'admin','94287db147a171de210fa289d5d9bb0e065377795f71e7ede2a2f19a2feb60db','Nguyễn Như Tuấn','tuanquynh0508@gmail.com',1,0,NULL,NULL,'2015-09-25 23:26:58','2015-09-29 15:02:48'),(2,'editor','55c6034c3f2ad82b9c60b21b7a96a92e9629032c4f18b627ef54e4f498db20ef','Nhập liệu','editor@gmail.com',0,1,NULL,NULL,'2015-09-28 22:04:06','2015-09-29 11:37:05');
+insert  into `user`(`id`,`username`,`passwd`,`fullname`,`email`,`is_admin`,`is_active`,`reset_token`,`reset_timeout`,`created_at`,`updated_at`) values (1,'admin','94287db147a171de210fa289d5d9bb0e065377795f71e7ede2a2f19a2feb60db','Nguyễn Như Tuấn','tuanquynh0508@gmail.com',1,1,NULL,NULL,'2015-09-25 23:26:58','2015-09-29 15:08:32'),(2,'editor','55c6034c3f2ad82b9c60b21b7a96a92e9629032c4f18b627ef54e4f498db20ef','Nhập liệu','editor@gmail.com',0,0,NULL,NULL,'2015-09-28 22:04:06','2015-09-29 15:08:35');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
