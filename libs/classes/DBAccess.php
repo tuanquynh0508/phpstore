@@ -5,7 +5,7 @@ use libs\classes\HttpException;
 
 /**
  * DBAccess class
- * 
+ *
  * Ý tưởng tạo ra một lớp xử lý kết nối Database và thực hiện các truy vấn trên
  * database tập trung. Sử dụng kế thừa từ đối tượng mysqli của PHP chuẩn
  *
@@ -36,7 +36,7 @@ class DBAccess extends \mysqli
 		//Set charset là UTF-8, tương đương với câu SET NAMES UTF-8; của mysql
 		$this->set_charset("utf8");
 	}
-	
+
 	/**
 	 * {@inheritdoc}
 	 * Hàm hủy, đóng kết nối tới db khi giải phóng class
@@ -44,10 +44,10 @@ class DBAccess extends \mysqli
 	public function __destruct() {
 		$this->close();
 	}
-	
+
 	/**
 	 * Xóa bản ghi theo id
-	 * 
+	 *
 	 * @param string $tableName Tên bảng
 	 * @param integer $id Id cần xóa
 	 * @return boolean
@@ -67,13 +67,13 @@ class DBAccess extends \mysqli
 		} else {
 			throw new HttpException($this->error, 500);
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Lấy ra một bản ghi theo Id
-	 * 
+	 *
 	 * @param string $tableName Tên bảng
 	 * @param integer $id Id cần tìm
 	 * @return object
@@ -91,13 +91,37 @@ class DBAccess extends \mysqli
 		} else {
 			throw new HttpException($this->error, 500);
 		}
-		
+
 		return $record;
 	}
-	
+
+	/**
+	 * Lấy ra một bản ghi theo Slug
+	 *
+	 * @param string $tableName Tên bảng
+	 * @param string $slug Slug cần tìm
+	 * @return object
+	 * @throws HttpException Lỗi xảy ra khi không thực hiện được
+	 */
+	public function findOneBySlug($tableName, $slug)
+	{
+		$record = NULL;
+		//Tạo câu truy vấn sql tìm bản ghi
+		$sql = "SELECT * FROM $tableName WHERE slug='$slug'";
+		if ($result = $this->query($sql)) {
+			//Trả về kết quả dưới dạng object
+			$record = $result->fetch_object();
+			$result->close();
+		} else {
+			throw new HttpException($this->error, 500);
+		}
+
+		return $record;
+	}
+
 	/**
 	 * Lấy giá trị đầu tiên kết quả từ câu truy vấn COUNT, MAX..
-	 * 
+	 *
 	 * @param string $sql SQL truyền vào
 	 * @return string
 	 * @throws HttpException Lỗi xảy ra khi không thực hiện được
@@ -116,14 +140,14 @@ class DBAccess extends \mysqli
 		} else {
 			throw new HttpException($this->error, 500);
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Tìm tất cả các bản ghi theo SQL
-	 * 
-	 * @param string $sql Câu truy vấn 
+	 *
+	 * @param string $sql Câu truy vấn
 	 * @return array
 	 * @throws HttpException Lỗi xảy ra khi không thực hiện được
 	 */
@@ -139,13 +163,13 @@ class DBAccess extends \mysqli
 		} else {
 			throw new HttpException($this->error, 500);
 		}
-		
+
 		return $list;
 	}
-	
+
 	/**
 	 * Thêm mới hoặc cập nhật bản ghi
-	 * 
+	 *
 	 * @param string $tableName Tên bảng
 	 * @param array $attributes Mảng giá trị thuộc tính
 	 * @param string $pkName Tên của khóa chính, truyền vào nếu thực hiện cập nhật
@@ -170,9 +194,9 @@ class DBAccess extends \mysqli
 		try {
 			//Khởi tạo một transaction
 			$this->autocommit(FALSE);
-			
+
 			//Thực hiện truy vấn
-			if ($this->query($sql)) {				
+			if ($this->query($sql)) {
 				if($isAddNew) {
 					//Nếu thêm mới, thì lấy id mới nhất được thêm vào
 					$insertId = $this->insert_id;
@@ -180,7 +204,7 @@ class DBAccess extends \mysqli
 					//Nếu cập nhật sẽ lấy id từ khóa chính truyền vào
 					$insertId = $attributes[$pkName];
 				}
-				//Lấy ra bản ghi vừa thêm vào, với id 
+				//Lấy ra bản ghi vừa thêm vào, với id
 				$record = $this->findOneById($tableName, $insertId);
 			} else {
 				throw new HttpException($this->error, 500);
@@ -198,10 +222,10 @@ class DBAccess extends \mysqli
 			$this->autocommit(TRUE);
 		}
 	}
-	
+
 	/**
 	 * Tạo câu truy vấn thêm mới
-	 * 
+	 *
 	 * @param string $tableName Tên bảng
 	 * @param array $attributes Mảng giá trị thuộc tính
 	 * @return string
@@ -217,16 +241,16 @@ class DBAccess extends \mysqli
 			//Lấy giá trị và thực hiện escape các ký tự đặc biệt trước khi đưa vào sql
 			$values[] = $this->real_escape_string($value);
 		}
-		
+
 		$sql = "INSERT INTO $tableName(".implode(",", $fields).") ";
 		$sql .= "VALUES ('".implode("','", $values)."')";
 
 		return $sql;
 	}
-	
+
 	/**
 	 * Tạo câu truy vấn cập nhật
-	 * 
+	 *
 	 * @param string $tableName
 	 * @param array $attributes
 	 * @param string $pkName

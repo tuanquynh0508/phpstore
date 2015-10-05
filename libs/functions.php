@@ -309,7 +309,7 @@ function sendEmail($to, $subject, $message, $fromEmail = '', $fromName = '') {
 
 /**
  * Lấy nội dung từ template có truyền đối số vào
- * 
+ *
  * @param string $filename Đường dẫn file template
  * @param array $params Mảng đối số
  * @return string
@@ -321,7 +321,7 @@ function getTemplate($filename, $params = array()) {
 			$content = preg_replace('/{%'.$key.'%}/', $value, $content);
 		}
 	}
-	
+
 	return $content;
 }
 
@@ -418,7 +418,7 @@ function getUserAttrSession($key) {
 
 /**
  * Tạo mật khẩu cho user
- * 
+ *
  * @param string $password
  * @return string
  */
@@ -428,7 +428,7 @@ function generateUserPassword($username, $password) {
 
 /**
  * Tạo token để reset mật khẩu cho user
- * 
+ *
  * @param string $username
  * @return string
  */
@@ -437,3 +437,54 @@ function generateUserResetToken($username) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+//FRONTEND
+
+/**
+ * Tạo menu left frontend
+ *
+ * @param mysqli $condb
+ * @return string
+ */
+function renderFrontendLeftMenu($condb) {
+	$slug = '';
+	if(isset($_GET['slug'])) {
+		$slug = $_GET['slug'];
+	}
+
+	$categories = getCategoryList($condb);
+	$html = '<ul>';
+	foreach ($categories as $category) {
+		$class = '';
+		if($slug == $category->slug) {
+			$class = 'class="active"';
+		}
+		$html .= '	<li '.$class.'><a href="category.php?slug='.$category->slug.'">'.$category->title.'</a></li>';
+	}
+	$html .= '</ul>';
+
+	return $html;
+}
+
+/**
+ * Tìm sản phẩm theo danh mục
+ * 
+ * @param mysqli $condb
+ * @param stdClass $category
+ * @return array
+ * @throws Exception Nếu có lỗi xảy ra
+ */
+function getProductByCategory($condb, $category) {
+	$list = array();
+	$sql = "SELECT * FROM product WHERE category_id=".$category->id." LIMIT 0,4";
+	if ($result = $condb->query($sql)) {
+		while ($obj = $result->fetch_object()) {
+			$list[] = $obj;
+		}
+		$result->close();
+	} else {
+		throw new Exception($condb->error);
+	}
+
+	return $list;
+}

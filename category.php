@@ -12,7 +12,24 @@ use libs\classes\Validator;
 
 $oDBAccess = new DBAccess();
 
-$categories = getCategoryList($oDBAccess);
+$slug = '';
+if(isset($_GET['slug'])) {
+	$slug = $_GET['slug'];
+}
+
+$category = $oDBAccess->findOneBySlug('category', $slug);
+if(null === $category) {
+	throw new HttpException('Danh mục này không tồn tại', 500);
+}
+
+$where = "WHERE category_id={$category->id}";
+
+//Lấy ra tổng số bản ghi
+$totalRecord = intval($oDBAccess->scalarBySQL("SELECT COUNT(*) FROM product ".$where));
+//Tạo ra đối tượng phân trang
+$oDBPagination = new DBPagination($totalRecord, 16);
+//Lấy ra danh sách các bản ghi
+$list = $oDBAccess->findAllBySql("SELECT * FROM product $where ORDER BY created_at DESC {$oDBPagination->getLimit()}");
 ?>
 <?php include 'libs/includes/frontend/header.inc.php'; ?>
 
@@ -26,20 +43,13 @@ $categories = getCategoryList($oDBAccess);
 
 					<p><img src="img/frontend/banner.jpg"></p>
 
-					<?php
-					if(!empty($categories)):
-					foreach ($categories as $category):
-						$products = getProductByCategory($oDBAccess, $category);
-						if(empty($products)) {
-							continue;
-						}
-					?>
 					<div class="category">
 						<div class="title-box clearfix">
 							<h2><?= $category->title ?></h2>
 						</div><!-- /.title-box -->
 						<div class="clearfix">
-							<?php foreach ($products as $item): ?>
+							<?php if(!empty($list)): ?>
+							<?php foreach ($list as $item): ?>
 							<div class="product-item">
 								<div class="thumbs">
 									<a href="product.php?slug=<?= $item->slug ?>" title="<?= $item->title ?>">
@@ -53,12 +63,17 @@ $categories = getCategoryList($oDBAccess);
 								<button class="btn-add-cart" data-id="<?= $item->id ?>">Mua sản phẩm</button>
 							</div><!-- /.product-item -->
 							<?php endforeach; ?>
+							<?php else: ?>
+							<p>Danh mục không có sản phẩm.</p>
+							<?php endif; ?>
 						</div>
 					</div><!-- /.category -->
-					<?php
-					endforeach;
-					endif;
-					?>
+
+					<?php if($oDBPagination->getMaxPage() > 1): ?>
+					<div class="pagination-link">
+						<?= $oDBPagination->renderPagination('category.php') ?>
+					</div>
+					<?php endif; ?>
 
 				</section><!-- /#rightPage -->
 

@@ -21,8 +21,8 @@
 			<nav id="topMenu">
 				<ul class="clearfix">
 					<li class="active"><a href="index.php">Trang chủ</a></li>
-					<li><a href="index.php">Giới thiệu</a></li>
-					<li><a href="index.php">Sản phẩm</a></li>
-					<li><a href="index.php">Liên hệ</a></li>
+					<li><a href="about.php">Giới thiệu</a></li>
+					<li><a href="help.php">Hướng dẫn mua hàng</a></li>
+					<li><a href="contact.php">Liên hệ</a></li>
 				</ul>
 			</nav><!-- /#topMenu -->

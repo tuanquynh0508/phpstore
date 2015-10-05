@@ -202,9 +202,13 @@ footer {
 	background-color: #ccc;
 }
 
+.category {
+	margin-bottom: 20px;
+}
 .category .title-box {
 	padding: 10px;
-	border: 1px solid #ccc;
+	background-color: #ccc;
+	margin-bottom: 20px;
 }
 .category .title-box h2 {
 	font-size: 16px;
@@ -221,7 +225,7 @@ footer {
 	display: table-cell;
 	table-layout: fixed;
 	vertical-align: middle;
-	height: 200px;
+	height: 180px;
 }
 .category .product-item .thumbs img {
 	max-width: 70%;

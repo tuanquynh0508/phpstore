@@ -97,13 +97,13 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM product $where ORDER BY created_
 <table>
 	<thead>
 		<tr>
-			<th>#</th>
-			<th>Ảnh</th>
-			<th>Tiêu đề</th>
-			<th>Slug</th>
-			<th>Giá</th>
-			<th>Trạng thái</th>
-			<th>Thao tác</th>
+			<th nowrap>#</th>
+			<th nowrap>Ảnh</th>
+			<th nowrap>Tiêu đề</th>
+			<th nowrap>Slug</th>
+			<th nowrap>Giá</th>
+			<th nowrap>Trạng thái</th>
+			<th nowrap>Thao tác</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -117,7 +117,7 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM product $where ORDER BY created_
 			</td>
 			<td><a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><?= $item->title ?></a></td>
 			<td><?= $item->slug ?></td>
-			<td><?= vietnameseMoneyFormat($item->price) ?></td>
+			<td nowrap><?= vietnameseMoneyFormat($item->price, 'VND') ?></td>
 			<td class="text-center"><?= renderActive($item, 'admin_'.$pageAliasName.'.php') ?></td>
 			<td class="text-center">
 				<a href="admin_<?= $pageAliasName ?>_form.php?id=<?= $item->id ?>"><img src="img/admin/edit.png"/></a>
