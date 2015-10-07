@@ -438,6 +438,51 @@ function generateUserResetToken($username) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+//CART
+function addCart($productId, $quantity) {
+	$cart = getCart();
+	if(array_key_exists($productId, $cart)) {
+		$cart[$productId] += intval($quantity);
+	} else {
+		$cart[$productId] = intval($quantity);
+	}
+	
+	$_SESSION['cart'] = $cart;
+}
+
+function getCart() {
+	if(!array_key_exists('cart', $_SESSION)) {
+		$_SESSION['cart'] = array();
+	}
+	
+	$cart = $_SESSION['cart'];
+	
+	return $cart;
+}
+
+function setCart($cart) {
+	$_SESSION['cart'] = $cart;
+}
+
+function removeCart($cart) {
+	$_SESSION['cart'] = array();
+}
+
+function getTotalProductInCart() {
+	$cart = getCart();
+	
+	$total = 0;
+	if(!empty($cart)) {
+		foreach($cart as $quantity) {
+			$total += intval($quantity);
+		}
+	}
+	
+	return $total;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 //FRONTEND
 
 /**

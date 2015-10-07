@@ -37,8 +37,18 @@ class HttpException extends \Exception
 	public function __toString() 
 	{
 		http_response_code($this->getCode());
-		$message = "<h1>Error {$this->getCode()}</h1>";
-		$message .= "<p>" . htmlentities($this->getMessage()) . " in <strong>{$this->getFile()}</strong> on line <strong>{$this->getLine()}</strong></p>";
+		$message = '<!DOCTYPE html>';
+		$message .= '<html>';
+		$message .= '	<head>';
+		$message .= '		<title>PHPStore</title>';
+		$message .= '		<meta charset="UTF-8">';
+		$message .= '		<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+		$message .= '	</head>';
+		$message .= '	<body>';
+		$message .= "		<h1>Error {$this->getCode()}</h1>";
+		$message .= "		<p>" . htmlentities($this->getMessage()) . " in <strong>{$this->getFile()}</strong> on line <strong>{$this->getLine()}</strong></p>";
+		$message .= '	</body>';
+		$message .= '</html>';
 		return $message;
 	}
 	

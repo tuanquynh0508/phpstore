@@ -5,6 +5,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="css/reset.css" rel="stylesheet" type="text/css"/>
+		<link href="js/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
 		<link href="css/frontend-ver-1.css" rel="stylesheet" type="text/css"/>
 		<!--[if lt IE 9]>
 			<script src="js/html5shiv.min.js"></script>
@@ -15,7 +16,7 @@
 
 			<header>
 				<a href="index.php" id="branchLogo"><span>PHPStore</span></a>
-				<div id="shoppingCart"><a href="#">Giỏ hàng có 2 sản phẩm</a></div>
+				<div id="shoppingCart"><a href="cart.php">Giỏ hàng có <span id="totalInCart"><?= getTotalProductInCart() ?></span> sản phẩm</a></div>
 			</header><!-- /header -->
 
 			<nav id="topMenu">
