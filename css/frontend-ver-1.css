@@ -51,6 +51,10 @@ p {
 	float: right;
 }
 
+.w-50p {
+	width: 50%;
+}
+
 .pageTitle {
 	font-size: 30px;
 	margin-bottom: 30px;
@@ -366,12 +370,27 @@ footer {
 	float: left;
 	height: 30px;
 	line-height: 30px;
-	width: 120px;
+	width: 100px;
 	margin-right: 10px;
 	text-align: right;
 }
 .form-control {
 	float: left;
+	/* These are technically the same, but use both */
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+
+	-ms-word-break: break-all;
+	/* This is the dangerous one in WebKit, as it breaks things wherever */
+	word-break: break-all;
+	/* Instead use this non-standard one: */
+	word-break: break-word;
+
+	/* Adds a hyphen where the word breaks, if supported (No Blink) */
+	-ms-hyphens: auto;
+	-moz-hyphens: auto;
+	-webkit-hyphens: auto;
+	hyphens: auto;
 }
 
 input:not([type="file"]),
@@ -434,6 +453,8 @@ textarea:required:valid {
 	margin: 0px;
 	padding: 0px;
 	color: #EC2121;
+	white-space: pre-line;
+	width: 240px;
 }
 
 .help-block {

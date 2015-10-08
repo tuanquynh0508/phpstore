@@ -10,6 +10,7 @@ use libs\classes\DBPagination;
 use libs\classes\HttpException;
 use libs\classes\Validator;
 
+$oFlashMessage = new FlashMessage();
 $oDBAccess = new DBAccess();
 
 $categories = getCategoryList($oDBAccess);
@@ -23,7 +24,9 @@ $categories = getCategoryList($oDBAccess);
 				</section><!-- /#leftPage -->
 
 				<section id="rightPage">
-
+					
+					<?php include "libs/includes/frontend/flash_message.inc.php"; ?>
+					
 					<p><img src="img/frontend/banner.jpg"></p>
 
 					<?php

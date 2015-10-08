@@ -441,6 +441,7 @@ function generateUserResetToken($username) {
 //CART
 function addCart($productId, $quantity) {
 	$cart = getCart();
+	
 	if(array_key_exists($productId, $cart)) {
 		$cart[$productId] += intval($quantity);
 	} else {
@@ -451,7 +452,7 @@ function addCart($productId, $quantity) {
 }
 
 function getCart() {
-	if(!array_key_exists('cart', $_SESSION)) {
+	if(!isset($_SESSION['cart'])) {
 		$_SESSION['cart'] = array();
 	}
 	
@@ -464,7 +465,7 @@ function setCart($cart) {
 	$_SESSION['cart'] = $cart;
 }
 
-function removeCart($cart) {
+function removeCart() {
 	$_SESSION['cart'] = array();
 }
 
@@ -481,6 +482,89 @@ function getTotalProductInCart() {
 	return $total;
 }
 
+function renderCartTableProductForEmail($productList) {
+	$cart = getCart();
+	
+	$html = '<table border="1">';
+	$html .= '	<thead>';
+	$html .= '		<tr>';
+	$html .= '			<th>STT</th>';
+	$html .= '			<th>Sản phẩm</th>';
+	$html .= '			<th>Đơn giá</th>';
+	$html .= '			<th>Số lượng</th>';
+	$html .= '			<th>Thành tiền</th>';
+	$html .= '		</tr>';
+	$html .= '	</thead>';
+	$html .= '	<tbody>';
+	
+	$totalPrice = 0;
+	foreach($productList as $item) {
+		$realPrice = $item->price*$cart[$item->id];
+		$totalPrice += $realPrice;
+		$html .= '		<tr>';
+		$html .= '			<td class="text-center">1</td>';
+		$html .= '			<td>';
+		if($item->thumbnail !='' && file_exists(UPLOAD_DIR.$item->thumbnail)){
+			$html .= '				<img src="'.APP_URL.UPLOAD_DIR.'thumbs/'.$item->thumbnail .'" height="50"/>';
+		}
+		$html .= $item->title;
+		$html .= '			</td>';
+		$html .= '			<td class="text-center">'.vietnameseMoneyFormat($item->price, 'VND').'</td>';
+		$html .= '			<td class="text-center">'.$cart[$item->id].'</td>';
+		$html .= '			<td class="text-center">'.vietnameseMoneyFormat($realPrice, 'VND').'</td>';
+		$html .= '		</tr>';
+	}
+	
+	$html .= '	</tbody>';
+	$html .= '	<tfoot>';
+	$html .= '		<tr>';
+	$html .= '			<td colspan="4">Tổng số:</td>';
+	$html .= '			<td colspan="1" class="text-center">'.vietnameseMoneyFormat($totalPrice, 'VND').'</td>';
+	$html .= '		</tr>';
+	$html .= '	</tfoot>';
+	$html .= '</table>';
+	
+	return $html;
+}
+
+function renderCartStatus($status) {
+	$statusList = getCartStatusList();
+	$messag = $statusList[0];
+	
+	if(isset($statusList[$status])) {
+		$messag = $statusList[$status];
+	}
+	
+	switch ($status) {
+		case 1:
+			$type = 'new';
+			break;
+		case 2:
+			$type = 'progress';
+			break;
+		case 3:
+			$type = 'finished';
+			break;
+		default:
+			$type = 'suspended';
+			break;
+	}
+	
+	$html = '<span class="cart-status cart-status-'.$type.'">';
+	$html .= $messag;
+	$html .= '</span>';
+	
+	return $html;
+}
+
+function getCartStatusList() {
+	return array(
+		0 => 'Bị hủy',
+		1 => 'Chưa xử lý',
+		2 => 'Đang xử lý',
+		3 => 'Đã hoàn thành'
+	);
+}
 ////////////////////////////////////////////////////////////////////////////////
 
 //FRONTEND

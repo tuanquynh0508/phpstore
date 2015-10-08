@@ -42,6 +42,9 @@ p {
 .text-center {
 	text-align: center;
 }
+.text-bold {
+	font-weight: bold;
+}
 
 .disabled {
 	cursor: not-allowed !important;
@@ -61,6 +64,21 @@ p {
 
 .v-middle {
 	vertical-align: middle;
+}
+
+.w-50p {
+	width: 50%;
+}
+
+.pull-left {
+	float: left;
+}
+.pull-right {
+	float: right;
+}
+
+h3 {
+	font-size: 22px;
 }
 
 .wrapper {
@@ -261,4 +279,28 @@ textarea:required:valid {
 	margin: 5px 0px;
 	font-size: 12px;
 	color: #999;
+}
+
+.cart-status {
+	display: inline-block;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	padding: 5px;
+	min-width: 100px;
+	text-align: center;
+	font-size: 11px;
+	font-weight: normal;
+}
+.cart-status-new {
+	background-color: #a7d6f9;
+}
+.cart-status-progress {
+	background-color: #fcf4cc;
+}
+.cart-status-finished {
+	background-color: #ccfecc;
+}
+.cart-status-suspended {
+	background-color: #ffcece;
 }

@@ -69,7 +69,7 @@ if(!empty($cart)) {
 											<?php if($item->thumbnail !='' && file_exists(UPLOAD_DIR.$item->thumbnail)): ?>
 											<img src="<?= UPLOAD_DIR.'thumbs/'.$item->thumbnail ?>" height="50"/>
 											<?php endif; ?>
-											Tên sản phẩm
+											<?= $item->title ?>
 										</a>
 									</td>
 									<td class="text-center"><span class="price" data-value="<?= $item->price ?>"><?= vietnameseMoneyFormat($item->price, 'VND') ?></span></td>
@@ -84,7 +84,7 @@ if(!empty($cart)) {
 							<tfoot>
 								<tr>
 									<td colspan="4">Tổng số:</td>
-									<td colspan="2"><span class="total-price"><?= vietnameseMoneyFormat($totalPrice, 'VND') ?></td>
+									<td colspan="2"><span class="total-price"><?= vietnameseMoneyFormat($totalPrice, 'VND') ?></span></td>
 								</tr>
 							</tfoot>
 						</table>
@@ -93,9 +93,9 @@ if(!empty($cart)) {
 						<?php endif; ?>
 
 						<p class="text-right">
-							<button type="button" class="button-link" data-url="">Tiếp tục mua hàng</button>
+							<button type="button" class="button-link" data-url="index.php">Tiếp tục mua hàng</button>
 							<?php if(!empty($cart)): ?>
-							<button type="button" class="button-link" data-url="">Tạo đơn hàng</button>
+							<button type="button" class="button-link" data-url="checkout.php">Tạo đơn hàng</button>
 							<button type="submit">Cập nhật giỏ hàng</button>
 							<?php endif; ?>
 						</p>

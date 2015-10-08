@@ -5,6 +5,7 @@ define("APP_NAME", "PHPStore");
 define("APP_URL", "http://localhost/phpstore/");
 define("WEBMASTER_EMAIL", 'tuanquynh0508@gmail.com');
 define("WEBMASTER_NAME", 'Web Master');
+define("ORDER_EMAIL", 'tuanquynh0508@gmail.com');
 
 //Mã bí mật
 define("SECRET_CODE", "phpstoresecretcodeabc123");

@@ -49,7 +49,7 @@ function cartInit() {
 		addCart(productId, quantity);
 	});	
 	
-	$('.cart input[type="number"]').change(function(){
+	$('.cart input[type="number"], .product-quantity').change(function(){
 		var row = $(this).closest('tr');
 		var realPrice = parseInt($('.price', row).attr('data-value'))*parseInt($(this).val());
 		$('.real-price', row).html(realPrice.formatMoney(0,'.',',')+' VND');
@@ -63,6 +63,13 @@ function cartInit() {
 		if (code == 13) { 
 			e.preventDefault();
 			return false;
+		}
+	});
+	
+	$('.button-link').click(function(){
+		var url = $(this).attr('data-url');
+		if(url !== undefined) {
+			window.location.href = url;
 		}
 	});
 }

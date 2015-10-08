@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Đơn đặt hàng từ {%fullname%} trên {%app_name%}</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<p>Xin chào !</p>
+		<p>&nbsp;</p>
+		<p>Khách hàng {%fullname%} đặt hàng online từ hệ thống web {%app_name%}. Chi tiết đơn hàng:</p>
+		<hr/>
+		<p>Mã đơn hàng: {%order_id%}</p>
+		<p>Khách hàng: {%fullname%}</p>
+		<p>Email: {%email%}</p>
+		<p>Điện thoại: {%tel%}</p>
+		<p>Địa chỉ: {%address%}</p>
+		<p>Chú thích: {%note%}</p>
+		<p>&nbsp;</p>
+		<p>Danh sách các sản phẩm đặt hàng</p>
+		{%table_product%}
+		<p>Để quản trị đơn hàng, hãy bấm vào liên kết sau: <a href="{%link%}">{%link%}</a></p>
+	</body>
+</html>

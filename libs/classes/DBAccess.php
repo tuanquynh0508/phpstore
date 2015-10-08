@@ -70,6 +70,33 @@ class DBAccess extends \mysqli
 
 		return $value;
 	}
+	
+	/**
+	 * Xóa bản ghi theo trường
+	 *
+	 * @param string $tableName Tên bảng
+	 * @param string $field Field tìm xóa
+	 * @param string $fieldValue Giá trị tìm xóa
+	 * @return boolean
+	 * @throws HttpException Lỗi xảy ra khi không thực hiện được
+	 */
+	public function deleteByField($tableName, $field, $fieldValue)
+	{
+		$value = false;
+		//Tạo câu truy vấn sql xóa
+		$sql = "DELETE FROM $tableName WHERE $field='$fieldValue'";
+		if ($result = $this->query($sql)) {
+			//Lấy ra số bản ghi đã được xóa
+			$affectedRows = $this->affected_rows;
+			if($affectedRows > 0) {
+				$value = true;
+			}
+		} else {
+			throw new HttpException($this->error, 500);
+		}
+
+		return $value;
+	}
 
 	/**
 	 * Lấy ra một bản ghi theo Id
@@ -204,8 +231,11 @@ class DBAccess extends \mysqli
 					//Nếu cập nhật sẽ lấy id từ khóa chính truyền vào
 					$insertId = $attributes[$pkName];
 				}
-				//Lấy ra bản ghi vừa thêm vào, với id
-				$record = $this->findOneById($tableName, $insertId);
+
+				if(0 !== $insertId) {
+					//Lấy ra bản ghi vừa thêm vào, với id
+					$record = $this->findOneById($tableName, $insertId);
+				}
 			} else {
 				throw new HttpException($this->error, 500);
 			}
