@@ -441,13 +441,13 @@ function generateUserResetToken($username) {
 //CART
 function addCart($productId, $quantity) {
 	$cart = getCart();
-	
+
 	if(array_key_exists($productId, $cart)) {
 		$cart[$productId] += intval($quantity);
 	} else {
 		$cart[$productId] = intval($quantity);
 	}
-	
+
 	$_SESSION['cart'] = $cart;
 }
 
@@ -455,9 +455,9 @@ function getCart() {
 	if(!isset($_SESSION['cart'])) {
 		$_SESSION['cart'] = array();
 	}
-	
+
 	$cart = $_SESSION['cart'];
-	
+
 	return $cart;
 }
 
@@ -471,20 +471,20 @@ function removeCart() {
 
 function getTotalProductInCart() {
 	$cart = getCart();
-	
+
 	$total = 0;
 	if(!empty($cart)) {
 		foreach($cart as $quantity) {
 			$total += intval($quantity);
 		}
 	}
-	
+
 	return $total;
 }
 
 function renderCartTableProductForEmail($productList) {
 	$cart = getCart();
-	
+
 	$html = '<table border="1">';
 	$html .= '	<thead>';
 	$html .= '		<tr>';
@@ -496,7 +496,7 @@ function renderCartTableProductForEmail($productList) {
 	$html .= '		</tr>';
 	$html .= '	</thead>';
 	$html .= '	<tbody>';
-	
+
 	$totalPrice = 0;
 	foreach($productList as $item) {
 		$realPrice = $item->price*$cart[$item->id];
@@ -514,7 +514,7 @@ function renderCartTableProductForEmail($productList) {
 		$html .= '			<td class="text-center">'.vietnameseMoneyFormat($realPrice, 'VND').'</td>';
 		$html .= '		</tr>';
 	}
-	
+
 	$html .= '	</tbody>';
 	$html .= '	<tfoot>';
 	$html .= '		<tr>';
@@ -523,18 +523,18 @@ function renderCartTableProductForEmail($productList) {
 	$html .= '		</tr>';
 	$html .= '	</tfoot>';
 	$html .= '</table>';
-	
+
 	return $html;
 }
 
 function renderCartStatus($status) {
 	$statusList = getCartStatusList();
 	$messag = $statusList[0];
-	
+
 	if(isset($statusList[$status])) {
 		$messag = $statusList[$status];
 	}
-	
+
 	switch ($status) {
 		case 1:
 			$type = 'new';
@@ -549,11 +549,11 @@ function renderCartStatus($status) {
 			$type = 'suspended';
 			break;
 	}
-	
+
 	$html = '<span class="cart-status cart-status-'.$type.'">';
 	$html .= $messag;
 	$html .= '</span>';
-	
+
 	return $html;
 }
 
@@ -564,6 +564,32 @@ function getCartStatusList() {
 		2 => 'Đang xử lý',
 		3 => 'Đã hoàn thành'
 	);
+}
+
+function statisticByCurrentMonth($condb) {
+	$sql ="SELECT DATE_FORMAT(o.updated_at, '%d')  AS `day`,
+		SUM(op.price*op.quantity) AS cost
+		FROM orders o
+		LEFT JOIN order_product op ON op.order_id = o.id
+		WHERE o.order_status = 3 AND DATE_FORMAT(o.updated_at, '%m%Y') = ".date('mY')."
+		GROUP BY DATE_FORMAT(o.updated_at, '%d%m%Y')";
+	$listCost = $condb->findAllBySql($sql);
+	$lastDay = intval(date('t'));
+	$list = array();
+	for($d=1;$d<=$lastDay;$d++) {
+		$day = ($d < 10)?'0'.$d:$d;
+		$item = new stdClass();
+		$item->day = date('Y-m').'-'.$day;
+		$item->value = 0;
+		foreach($listCost as $row) {
+			if($row->day == $day) {
+				$item->value = $row->cost;
+			}
+		}
+		$list[] = $item;
+	}
+
+	return json_encode($list);
 }
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -597,7 +623,7 @@ function renderFrontendLeftMenu($condb) {
 
 /**
  * Tìm sản phẩm theo danh mục
- * 
+ *
  * @param mysqli $condb
  * @param stdClass $category
  * @return array

@@ -37,13 +37,22 @@ $countCategory = $oDBAccess->scalarBySQL($sql);
 
 $sql = 'SELECT COUNT(*) FROM product';
 $countProduct = $oDBAccess->scalarBySQL($sql);
+
+$dataChartCurrentMonth = statisticByCurrentMonth($oDBAccess);
+?>
+
+<?php
+$cssBlock = <<<CSSBLOCK
+<link href="js/morris/morris.css" rel="stylesheet" type="text/css"/>
+CSSBLOCK;
 ?>
 
 <?php include 'libs/includes/admin/header.inc.php'; ?>
 <h2 id="pageTitle">Trang điều khiển</h2>
 
-<h3>Biểu đồ doanh thu</h3>
+<h3>Biểu đồ doanh thu tháng <?= date('m/Y') ?></h3>
 <hr/>
+<div id="graph"></div>
 
 <h3>Thống kê đơn hàng</h3>
 <hr/>
@@ -56,4 +65,22 @@ $countProduct = $oDBAccess->scalarBySQL($sql);
 <hr/>
 <p>Tổng số danh mục: <a href="admin_order.php"><?= $countCategory ?></a></p>
 <p>Tổng số sản phẩm: <a href="admin_order.php"><?= $countProduct ?></a></p>
+
+<?php
+$jsBlock = <<<JSBLOCK
+<script src="js/morris/raphael-min.js"></script>
+<script src="js/morris/morris.min.js"></script>
+<script>
+var data = $dataChartCurrentMonth;
+window.m = Morris.Line({
+  element: 'graph',
+  data: data,
+  xkey: 'day',
+  ykeys: ['value'],
+  labels: ['Doanh thu']
+});
+</script>
+JSBLOCK;
+?>
+
 <?php include 'libs/includes/admin/footer.inc.php'; ?>

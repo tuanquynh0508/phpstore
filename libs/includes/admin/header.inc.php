@@ -44,6 +44,11 @@ function renderMenuTop()
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Trang quản trị</title>
 	<link href="css/reset.css" rel="stylesheet" type="text/css"/>
+	<?php
+		if(isset($cssBlock)) {
+			echo $cssBlock;
+		}
+	?>
 	<link href="css/admin.css" rel="stylesheet" type="text/css"/>
 </head>
 

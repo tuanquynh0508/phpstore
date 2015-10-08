@@ -31,7 +31,7 @@ if(isset($_GET['keyword'])) {
 //Tạo ra câu điều kiện theo keyword
 $where = '';
 if(!empty($keyword)) {
-$where = "WHERE title LIKE '%$keyword%' OR slug LIKE '%$keyword%'";
+$where = "WHERE customer_name LIKE '%$keyword%' OR customer_email LIKE '%$keyword%' OR customer_tel LIKE '%$keyword%' OR customer_address LIKE '%$keyword%'";
 }
 
 //Thực hiện xử lý xóa bản ghi
@@ -93,9 +93,11 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM orders $where ORDER BY created_a
 			<td><?= $item->customer_tel ?></td>
 			<td><?= $item->customer_address ?></td>
 			<td class="text-center"><?= renderCartStatus($item->order_status) ?></td>
-			<td class="text-center">
+			<td>
 				<a href="admin_<?= $pageAliasName ?>_view.php?id=<?= $item->id ?>"><img src="img/admin/view.png"/></a>
+				<?php if($item->order_status != 3): ?>
 				<a href="admin_<?= $pageAliasName ?>.php?action=delete&id=<?= $item->id ?>" class="btn-delete"><img src="img/admin/trash.png"/></a>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<?php endforeach; ?>
