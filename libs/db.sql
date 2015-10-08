@@ -68,6 +68,8 @@ CREATE TABLE `order_product` (
 
 /*Data for the table `order_product` */
 
+insert  into `order_product`(`order_id`,`product_id`,`price`,`quantity`) values (4,1,2200000,1),(4,2,2500000,1),(6,3,7509000,1),(6,8,559000,2),(7,10,2749000,5);
+
 /*Table structure for table `orders` */
 
 DROP TABLE IF EXISTS `orders`;
@@ -83,9 +85,11 @@ CREATE TABLE `orders` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `orders` */
+
+insert  into `orders`(`id`,`customer_name`,`customer_email`,`customer_tel`,`customer_address`,`note`,`order_status`,`created_at`,`updated_at`) values (4,'Nguyễn Như Tuấn','tuanquynh@gmail.com','0903258221','Hà Đông, Hà Nội','Chuyển hàng nhanh lên nhé',2,'2015-10-08 10:37:45','2015-10-08 14:17:13'),(6,'Nguyễn Như Tuấn','tuanquynh@gmail.com','0903258221','Hà Đông, Hà Nội','Chuyển hàng nhanh lên nhé',1,'2015-10-08 11:16:32',NULL),(7,'Nguyễn Văn Test','test@gmail.com','0123456789','Quận Tân Bình, Sài Gòn','Chuyển theo xe khách cho mình nhé.',1,'2015-10-08 14:25:12',NULL);
 
 /*Table structure for table `product` */
 
