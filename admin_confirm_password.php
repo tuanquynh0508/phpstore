@@ -39,7 +39,6 @@ if($token != '') {
 		$oFlashMessage->setFlashMessage('success', 'Mã token của bạn không tồn tại hoặc đã hết hạn');
 	} else {
 		$password = stringRandom(6);
-		echo $password;
 		$attributes = array();
 		$attributes['id'] = $record->id;
 		$attributes['reset_token'] = '';
