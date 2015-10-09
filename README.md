@@ -8,6 +8,23 @@ phpstore là một phần mềm miễn phí, được sử dụng cho học tậ
 Bạn được quyền sửa đổi source code và triển khai cho các dự án của riêng bạn.
 Mọi hình thức yêu cầu hỗ trợ về sản phẩm sử dụng thương mại sẽ bị tính phí theo thỏa thuận.
 
+SỬ DỤNG
+--------
+- Sử dụng cho các cửa hàng nhỏ
+- Sử dụng cho việc học tập PHP, những kiến thức bạn có thể thu được là:
+*PHP cơ bản
+*Làm việc với Form, Post check, Validate dữ liệu, Upload file
+*Làm việc với biến session
+*Kết nối database, insert, update, delete, select dữ liệu với MySQLi
+*Quản lý người dùng đơn giản, login, update profile, forgot password
+*Giỏ hàng, quản lý đơn hàng
+*Sử dụng các plugin jquery chart, WYSIWYG, FancyBox
+*Cách tạo một ứng dụng CRUD (Create-Read-Update-Delete) với PHP
+*Cách sử dụng thư viện GD2 để tạo thumbnail ảnh
+*Send email html với hàm mb_send_mail
+*Cách sử dụng slug
+
+
 DEMO
 ----------
 Trang bên ngoài: http://phpstore.i-designer.net
