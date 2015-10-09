@@ -1,3 +1,40 @@
+<?php
+/**
+ * Trả về HTML của menu
+ *
+ * Ý tưởng: Hiển thị menu và đặt trạng thái active vào menu hiện tại theo danh sách
+ * các active mà người dùng định nghĩa
+ *
+ * @return string
+ */
+function renderMenuTop()
+{
+	$menus = array(
+		array('label' => 'Trang chủ', 'url' => 'index.php', 'active' => array('index.php')),
+		array('label' => 'Giới thiệu', 'url' => 'about.php', 'active' => array('about.php')),
+		array('label' => 'Hướng dẫn mua hàng', 'url' => 'help.php', 'active' => array('help.php')),
+		array('label' => 'Liên hệ', 'url' => 'contact.php', 'active' => array('contact.php')),
+	);
+
+	if(checkAuthentication()) {
+		$menus[] = array('label' => 'Quản trị', 'url' => 'admin.php', 'active' => array('admin.php'));
+	}
+
+	$html = '<ul class="clearfix">';
+	foreach($menus as $menu) {
+		$active = '';
+		//Kiểm tra xem trang hiện tại có nằm trong danh sách active hay không, nếu
+		//nằm trong danh sách active thì thêm đặt class active cho menu
+		if(in_array(basename($_SERVER['PHP_SELF']), $menu['active'])) {
+			$active = 'class="active"';
+		}
+		$html .= '<li '.$active.'><a href="'.$menu['url'].'">'.$menu['label'].'</a></li>';
+	}
+	$html .= '</ul>';
+
+	return $html;
+}
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -19,11 +56,4 @@
 				<div id="shoppingCart"><a href="cart.php">Giỏ hàng có <span id="totalInCart"><?= getTotalProductInCart() ?></span> sản phẩm</a></div>
 			</header><!-- /header -->
 
-			<nav id="topMenu">
-				<ul class="clearfix">
-					<li class="active"><a href="index.php">Trang chủ</a></li>
-					<li><a href="about.php">Giới thiệu</a></li>
-					<li><a href="help.php">Hướng dẫn mua hàng</a></li>
-					<li><a href="contact.php">Liên hệ</a></li>
-				</ul>
-			</nav><!-- /#topMenu -->
+			<nav id="topMenu"><?= renderMenuTop() ?></nav><!-- /#topMenu -->

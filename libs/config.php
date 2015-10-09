@@ -25,6 +25,8 @@ define("UPLOAD_H", 800);
 define("UPLOAD_THUMB_W", 200);
 define("UPLOAD_THUMB_H", 200);
 
+define("NUMBER_PRODUCT_VIEW", 8);
+
 //Hàm __autoload, tự động load các thư viện class vào chương trình chạy
 //Tham khảo tài liệu tại http://php.net/manual/en/language.oop5.autoload.php
 function __autoload($class)

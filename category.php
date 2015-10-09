@@ -30,6 +30,13 @@ $totalRecord = intval($oDBAccess->scalarBySQL("SELECT COUNT(*) FROM product ".$w
 $oDBPagination = new DBPagination($totalRecord, 16);
 //Lấy ra danh sách các bản ghi
 $list = $oDBAccess->findAllBySql("SELECT * FROM product $where ORDER BY created_at DESC {$oDBPagination->getLimit()}");
+
+$breadcrumbList = array(
+	array(
+		'url' => 'category.php?slug='.$category->slug,
+		'title' => $category->title,
+	)
+);
 ?>
 <?php include 'libs/includes/frontend/header.inc.php'; ?>
 
@@ -40,8 +47,8 @@ $list = $oDBAccess->findAllBySql("SELECT * FROM product $where ORDER BY created_
 				</section><!-- /#leftPage -->
 
 				<section id="rightPage">
-
-					<p><img src="img/frontend/banner.jpg"></p>
+					
+					<?= renderBreadcrumb($breadcrumbList) ?>
 
 					<div class="category">
 						<div class="title-box clearfix">

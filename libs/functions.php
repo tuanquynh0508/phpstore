@@ -337,6 +337,68 @@ function stringRandom($length = 16)
 
     return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
 }
+
+/**
+ * Hàm copy tất cả các file và thư mục
+ * 
+ * @param string $source
+ * @param string $dest
+ */
+function copyFolder($source, $dest)
+{
+    // Check for symlinks
+    if (is_link($source)) {
+        return symlink(readlink($source), $dest);
+    }
+    
+    // Simple copy for a file
+    if (is_file($source)) {
+        return copy($source, $dest);
+    }
+
+    // Make destination directory
+    if (!is_dir($dest)) {
+        mkdir($dest);
+    }
+
+    // Loop through the folder
+    $dir = dir($source);
+    while (false !== $entry = $dir->read()) {
+        // Skip pointers
+        if ($entry == '.' || $entry == '..') {
+            continue;
+        }
+
+        // Deep copy directories
+        copyFolder("$source/$entry", "$dest/$entry");
+    }
+
+    // Clean up
+    $dir->close();
+    return true;
+}
+
+/**
+ * Xóa tất cả thư mục và file
+ * 
+ * @param string $dirPath
+ */
+function deleteDirectory($dirPath) {
+    if (is_dir($dirPath)) {
+        $objects = scandir($dirPath);
+        foreach ($objects as $object) {
+            if ($object != "." && $object !="..") {
+                if (filetype($dirPath . DIRECTORY_SEPARATOR . $object) == "dir") {
+                    deleteDirectory($dirPath . DIRECTORY_SEPARATOR . $object);
+                } else {
+                    unlink($dirPath . DIRECTORY_SEPARATOR . $object);
+                }
+            }
+        }
+    reset($objects);
+    rmdir($dirPath);
+    }
+}
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -439,6 +501,12 @@ function generateUserResetToken($username) {
 ////////////////////////////////////////////////////////////////////////////////
 
 //CART
+/**
+ * Thêm sản phẩm vào giỏ hàng
+ * 
+ * @param integer $productId
+ * @param integer $quantity
+ */
 function addCart($productId, $quantity) {
 	$cart = getCart();
 
@@ -451,6 +519,11 @@ function addCart($productId, $quantity) {
 	$_SESSION['cart'] = $cart;
 }
 
+/**
+ * Lấy thông tin giỏ hàng
+ * 
+ * @return array
+ */
 function getCart() {
 	if(!isset($_SESSION['cart'])) {
 		$_SESSION['cart'] = array();
@@ -461,14 +534,27 @@ function getCart() {
 	return $cart;
 }
 
+/**
+ * Lưu thông tin giỏ hàng
+ * 
+ * @param array $cart
+ */
 function setCart($cart) {
 	$_SESSION['cart'] = $cart;
 }
 
+/**
+ * Xóa giỏ hàng
+ */
 function removeCart() {
 	$_SESSION['cart'] = array();
 }
 
+/**
+ * Lấy số lượng sản phẩm trong giỏ hàng
+ * 
+ * @return integer
+ */
 function getTotalProductInCart() {
 	$cart = getCart();
 
@@ -482,6 +568,12 @@ function getTotalProductInCart() {
 	return $total;
 }
 
+/**
+ * Tạo bảng sản phẩm của giỏ hàng cho gửi mail
+ * 
+ * @param array $productList
+ * @return string
+ */
 function renderCartTableProductForEmail($productList) {
 	$cart = getCart();
 
@@ -527,6 +619,12 @@ function renderCartTableProductForEmail($productList) {
 	return $html;
 }
 
+/**
+ * Tạo trạng thái đơn hàng
+ * 
+ * @param integer $status
+ * @return string
+ */
 function renderCartStatus($status) {
 	$statusList = getCartStatusList();
 	$messag = $statusList[0];
@@ -557,6 +655,11 @@ function renderCartStatus($status) {
 	return $html;
 }
 
+/**
+ * Danh sách các trạng thái của đơn hàng
+ * 
+ * @return array
+ */
 function getCartStatusList() {
 	return array(
 		0 => 'Bị hủy',
@@ -566,6 +669,12 @@ function getCartStatusList() {
 	);
 }
 
+/**
+ * Thống kê doanh thu theo tháng hiện tại
+ * 
+ * @param mysqli $condb
+ * @return string
+ */
 function statisticByCurrentMonth($condb) {
 	$sql ="SELECT DATE_FORMAT(o.updated_at, '%d')  AS `day`,
 		SUM(op.price*op.quantity) AS cost
@@ -574,6 +683,7 @@ function statisticByCurrentMonth($condb) {
 		WHERE o.order_status = 3 AND DATE_FORMAT(o.updated_at, '%m%Y') = ".date('mY')."
 		GROUP BY DATE_FORMAT(o.updated_at, '%d%m%Y')";
 	$listCost = $condb->findAllBySql($sql);
+	//Lấy ngày cuối cùng của tháng hiện tại
 	$lastDay = intval(date('t'));
 	$list = array();
 	for($d=1;$d<=$lastDay;$d++) {
@@ -642,4 +752,86 @@ function getProductByCategory($condb, $category) {
 	}
 
 	return $list;
+}
+
+/**
+ * Tạo đường dẫn Breadcrumb
+ * 
+ * @param array $pages
+ * @return string
+ */
+function renderBreadcrumb($pages = array()) {
+	$html = '<div class="pageBreadcrumb">';
+	$html .= '	<ul class="clearfix">';
+	$html .= '		<li><a href="index.php">Trang chủ</a></li>';
+	if(!empty($pages)) {
+		foreach ($pages as $page) {
+			$html .= '<li><a href="'.$page['url'].'">'.$page['title'].'</a></li>';
+		}
+	}
+	$html .= '	</ul>';
+	$html .= '</div>';
+	
+	return $html;
+}
+
+//PRODUCT SAW
+/**
+ * Thêm sản phẩm vào danh sách đã xem
+ * 
+ * @param integer $productId
+ */
+function addProductView($productId) {
+	$productIds = getProductView();
+	if(count($productIds) >= NUMBER_PRODUCT_VIEW) {
+		array_shift($productIds);
+	}
+	
+	if(!in_array($productId, $productIds)) {
+		$productIds[] = $productId;
+	}
+	
+	setProductView($productIds);
+}
+
+/**
+ * Lấy danh sách sản phẩm đã xem
+ * 
+ * @return array
+ */
+function getProductView() {
+	if(!isset($_SESSION['product_view'])) {
+		$_SESSION['product_view'] = array();
+	}
+
+	$products = $_SESSION['product_view'];
+
+	return $products;
+}
+
+/**
+ * Lưu thông tin sản phẩm đã xem
+ * 
+ * @param array $list
+ */
+function setProductView($list) {
+	$_SESSION['product_view'] = $list;
+}
+
+/**
+ * Lấy thông tin sản phẩm đã xem từ database
+ * 
+ * @param mysqli $condb
+ * @return array
+ */
+function getDataProductView($condb, $currentId) {
+	$productIds = getProductView();
+	if(!empty($productIds)) {
+		$sql = "SELECT * FROM product WHERE id IN(".  implode(',', $productIds).") AND id != $currentId";
+		$list = $condb->findAllBySql($sql);
+		
+		return $list;
+	}
+	
+	return array();
 }

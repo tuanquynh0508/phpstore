@@ -24,6 +24,21 @@ if(null === $product) {
 
 $productCategory = $oDBAccess->findOneById('category', $product->category_id);
 $productFirm = $oDBAccess->findOneById('firm', $product->firm_id);
+
+$breadcrumbList = array(
+	array(
+		'url' => 'category.php?slug='.$productCategory->slug,
+		'title' => $productCategory->title,
+	),
+	array(
+		'url' => 'product.php?slug='.$product->slug,
+		'title' => $product->title,
+	)
+);
+
+//Thêm vào danh sách đã xem
+addProductView($product->id);
+$listProductView = getDataProductView($oDBAccess, $product->id);
 ?>
 <?php include 'libs/includes/frontend/header.inc.php'; ?>
 
@@ -34,7 +49,9 @@ $productFirm = $oDBAccess->findOneById('firm', $product->firm_id);
 				</section><!-- /#leftPage -->
 
 				<section id="rightPage">
-
+					
+					<?= renderBreadcrumb($breadcrumbList) ?>
+					
 					<div class="product-summary-box clearfix">
 						<?php if($product->thumbnail !='' && file_exists(UPLOAD_DIR.$product->thumbnail)): ?>
 						<div class="pull-left">
@@ -67,44 +84,34 @@ $productFirm = $oDBAccess->findOneById('firm', $product->firm_id);
 							</div><!-- /.tab-item -->
 							
 							<div class="tab-item" id="reviewTab">
-								Đánh giá người dùng
+								<p>Đánh giá người dùng có thể sử dụng các plugin của Facebook hoặc các plugin về comment của các dịch vụ cung cấp khác.</p>
 							</div><!-- /.tab-item -->
 							
 						</div><!-- /.tab-content -->
 					</div><!-- /.product-detail-box -->
 					
-					<?php /*
+					<?php if(!empty($listProductView)): ?>
 					<h2>Các sản phẩm đã xem</h2>
 					<hr/>
 					<div class="category">
 						<div class="clearfix">
+							<?php foreach ($listProductView as $item): ?>
 							<div class="product-item">
-								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
-								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
-								<p class="price">3.000 VND</p>
-								<button class="btn-add-cart">Mua sản phẩm</button>
+								<div class="thumbs">
+									<a href="product.php?slug=<?= $item->slug ?>" title="<?= $item->title ?>">
+										<?php if($item->thumbnail !='' && file_exists(UPLOAD_DIR.$item->thumbnail)): ?>
+										<img src="<?= UPLOAD_DIR.'thumbs/'.$item->thumbnail ?>"/>
+										<?php endif; ?>
+									</a>
+								</div>
+								<p class="title"><a href="product.php?slug=<?= $item->slug ?>" title="<?= $item->title ?>"><?= $item->title ?></a></p>
+								<p class="price"><?= vietnameseMoneyFormat($item->price, 'VND') ?></p>
+								<button class="btn-add-cart" data-id="<?= $item->id ?>">Mua sản phẩm</button>
 							</div><!-- /.product-item -->
-							<div class="product-item">
-								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
-								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
-								<p class="price">3.000 VND</p>
-								<button class="btn-add-cart">Mua sản phẩm</button>
-							</div><!-- /.product-item -->
-							<div class="product-item">
-								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
-								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
-								<p class="price">3.000 VND</p>
-								<button class="btn-add-cart">Mua sản phẩm</button>
-							</div><!-- /.product-item -->
-							<div class="product-item">
-								<div class="thumbs"><a href="#"><img src="uploads/thumbs/micro-intel-core-i7-4790.jpg"></a></div>
-								<p class="title"><a href="#" title="Sản phẩm 1">Sản phẩm 1</a></p>
-								<p class="price">3.000 VND</p>
-								<button class="btn-add-cart">Mua sản phẩm</button>
-							</div><!-- /.product-item -->
+							<?php endforeach; ?>
 						</div>
 					</div><!-- /.category -->
-					 */?>
+					 <?php endif; ?>
 
 				</section><!-- /#rightPage -->
 

@@ -51,8 +51,18 @@ p {
 	float: right;
 }
 
+.w-40p {
+	width: 40%;
+}
 .w-50p {
 	width: 50%;
+}
+.w-60p {
+	width: 60%;
+}
+
+.border-1 {
+	border: 1px solid #ccc;
 }
 
 .pageTitle {
@@ -462,4 +472,35 @@ textarea:required:valid {
 	margin: 5px 0px;
 	font-size: 12px;
 	color: #999;
+}
+
+.pageBreadcrumb {
+	margin-bottom: 20px;
+}
+.pageBreadcrumb ul {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+.pageBreadcrumb ul li {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	background: url(../img/frontend/arrow_right.png) no-repeat 100% 50%;
+	padding-right: 20px;
+}
+.pageBreadcrumb ul li:last-child {
+	background: none transparent;
+}
+.pageBreadcrumb ul li a {
+	display: inline-block;
+	padding: 5px 5px;
+	white-space: nowrap;
+	text-decoration: none;
+	color: #333;
+}
+.pageBreadcrumb ul li:last-child a,
+.pageBreadcrumb ul li a:hover {
+	color: #fa6600;
 }

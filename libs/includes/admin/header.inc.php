@@ -10,6 +10,7 @@
 function renderMenuTop()
 {
 	$menus = array(
+		array('label' => 'Shop', 'url' => 'index.php', 'active' => array('index.php')),
 		array('label' => 'Trang chủ', 'url' => 'admin.php', 'active' => array('admin.php')),
 		array('label' => 'Danh mục', 'url' => 'admin_category.php', 'active' => array('admin_category.php', 'admin_category_form.php')),
 		array('label' => 'Đối tác', 'url' => 'admin_firm.php', 'active' => array('admin_firm.php', 'admin_firm_form.php')),
