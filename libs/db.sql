@@ -89,7 +89,7 @@ CREATE TABLE `orders` (
 
 /*Data for the table `orders` */
 
-insert  into `orders`(`id`,`customer_name`,`customer_email`,`customer_tel`,`customer_address`,`note`,`order_status`,`created_at`,`updated_at`) values (4,'Nguyễn Như Tuấn','tuanquynh@gmail.com','0903258221','Hà Đông, Hà Nội','Chuyển hàng nhanh lên nhé',2,'2015-10-08 10:37:45','2015-10-08 14:17:13'),(6,'Nguyễn Như Tuấn','tuanquynh@gmail.com','0903258221','Hà Đông, Hà Nội','Chuyển hàng nhanh lên nhé',1,'2015-10-08 11:16:32',NULL),(7,'Nguyễn Văn Test','test@gmail.com','0123456789','Quận Tân Bình, Sài Gòn','Chuyển theo xe khách cho mình nhé.',1,'2015-10-08 14:25:12',NULL);
+insert  into `orders`(`id`,`customer_name`,`customer_email`,`customer_tel`,`customer_address`,`note`,`order_status`,`created_at`,`updated_at`) values (4,'Nguyễn Như Tuấn','tuanquynh@gmail.com','0903258221','Hà Đông, Hà Nội','Chuyển hàng nhanh lên nhé',3,'2015-10-08 10:37:45','2015-10-09 08:46:28'),(6,'Nguyễn Như Tuấn','tuanquynh@gmail.com','0903258221','Hà Đông, Hà Nội','Chuyển hàng nhanh lên nhé',3,'2015-10-08 11:16:32','2015-10-09 08:46:36'),(7,'Nguyễn Văn Test','test@gmail.com','0123456789','Quận Tân Bình, Sài Gòn','Chuyển theo xe khách cho mình nhé.',1,'2015-10-08 14:25:12',NULL);
 
 /*Table structure for table `product` */
 
