@@ -8,6 +8,11 @@ phpstore là một phần mềm miễn phí, được sử dụng cho học tậ
 Bạn được quyền sửa đổi source code và triển khai cho các dự án của riêng bạn.
 Mọi hình thức yêu cầu hỗ trợ về sản phẩm sử dụng thương mại sẽ bị tính phí theo thỏa thuận.
 
+DEMO
+----------
+Trang bên ngoài: http://phpstore.i-designer.net
+Trang quản trị: http://phpstore.i-designer.net/admin.php (tài khoản admin / 123456)
+
 SCREENSHOT
 ----------
 NA
@@ -33,6 +38,9 @@ Nếu bạn muốn đổi mã bí mật, hãy login vào quản trị trước, 
 LIÊN HỆ
 -------
 Nguyễn Như Tuấn
+
 http://i-designer.net
+
 tuanquynh0508@gmail.com
+
 +84 903258221
