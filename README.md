@@ -11,6 +11,7 @@ Mọi hình thức yêu cầu hỗ trợ về sản phẩm sử dụng thương 
 DEMO
 ----------
 Trang bên ngoài: http://phpstore.i-designer.net
+
 Trang quản trị: http://phpstore.i-designer.net/admin.php (tài khoản admin / 123456)
 
 SCREENSHOT
