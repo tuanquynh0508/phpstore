@@ -2,7 +2,7 @@
 //Gọi cấu hình, thư viện được sử dụng
 include '../config.php';
 include '../functions.php';
-
+//Set cron: 0	*	*	*	*	/usr/bin/php -q /home/tithoy/public_html/site_phpstore/libs/cron/restore.php >/dev/null 2>&1
 //Khai báo các class sử dụng
 use libs\classes\DBAccess;
 
