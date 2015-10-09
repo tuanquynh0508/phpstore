@@ -38,10 +38,6 @@ $oValidator = new Validator($validates, $oDBAccess);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$attributes = $_POST;
 
-	if(!isset($attributes['is_active'])) {
-		$attributes['is_active'] = 0;
-	}
-
 	//Truyền lại giá trị cho đối tượng form
 	foreach($attributes as $key => $value){
 		$record->$key = $value;

@@ -52,10 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$filename = __DIR__.'/libs/templates/email/contact.html';
 		$params = array(
 			'app_name' => APP_NAME,
-			'fullname' => $record->customer_name,
-			'email' => $record->customer_email,
-			'tel' => $record->customer_tel,
-			'content' => $record->customer_address,
+			'fullname' => $record->fullname,
+			'email' => $record->email,
+			'tel' => $record->tel,
+			'content' => $record->content,
 		);
 		$body = getTemplate($filename, $params);
 		sendEmail(WEBMASTER_EMAIL, $subject, $body, $record->email, $record->fullname);

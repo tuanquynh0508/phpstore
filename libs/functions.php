@@ -301,8 +301,7 @@ function sendEmail($to, $subject, $message, $fromEmail = '', $fromName = '') {
 	mb_internal_encoding('UTF-8');
 	$headers = "From: " . mb_encode_mimeheader($fromName) . "<" . $fromEmail . ">\n";
 	$headers .= "Reply-To: " . $fromEmail . "\n";
-	$headers .= "Content-type: text/html;\n"; //text/plain
-	$headers .= "charset=\"utf-8\";\n";
+	$headers .= "Content-type: text/html;charset=\"UTF-8\"\n"; //text/plain
 	$parameters = '-f  ' . $fromEmail;
 	return @mb_send_mail($to, $subject, $message, $headers, $parameters);
 }
@@ -577,7 +576,7 @@ function getTotalProductInCart() {
 function renderCartTableProductForEmail($productList) {
 	$cart = getCart();
 
-	$html = '<table border="1">';
+	$html = '<table border="1" width="100%">';
 	$html .= '	<thead>';
 	$html .= '		<tr>';
 	$html .= '			<th>STT</th>';
@@ -594,16 +593,16 @@ function renderCartTableProductForEmail($productList) {
 		$realPrice = $item->price*$cart[$item->id];
 		$totalPrice += $realPrice;
 		$html .= '		<tr>';
-		$html .= '			<td class="text-center">1</td>';
+		$html .= '			<td align="center">1</td>';
 		$html .= '			<td>';
 		if($item->thumbnail !='' && file_exists(UPLOAD_DIR.$item->thumbnail)){
 			$html .= '				<img src="'.APP_URL.UPLOAD_DIR.'thumbs/'.$item->thumbnail .'" height="50"/>';
 		}
 		$html .= $item->title;
 		$html .= '			</td>';
-		$html .= '			<td class="text-center">'.vietnameseMoneyFormat($item->price, 'VND').'</td>';
-		$html .= '			<td class="text-center">'.$cart[$item->id].'</td>';
-		$html .= '			<td class="text-center">'.vietnameseMoneyFormat($realPrice, 'VND').'</td>';
+		$html .= '			<td align="center">'.vietnameseMoneyFormat($item->price, 'VND').'</td>';
+		$html .= '			<td align="center">'.$cart[$item->id].'</td>';
+		$html .= '			<td align="center">'.vietnameseMoneyFormat($realPrice, 'VND').'</td>';
 		$html .= '		</tr>';
 	}
 
@@ -611,7 +610,7 @@ function renderCartTableProductForEmail($productList) {
 	$html .= '	<tfoot>';
 	$html .= '		<tr>';
 	$html .= '			<td colspan="4">Tổng số:</td>';
-	$html .= '			<td colspan="1" class="text-center">'.vietnameseMoneyFormat($totalPrice, 'VND').'</td>';
+	$html .= '			<td colspan="1" align="center">'.vietnameseMoneyFormat($totalPrice, 'VND').'</td>';
 	$html .= '		</tr>';
 	$html .= '	</tfoot>';
 	$html .= '</table>';
