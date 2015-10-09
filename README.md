@@ -12,18 +12,18 @@ SỬ DỤNG
 --------
 - Sử dụng cho các cửa hàng nhỏ
 - Sử dụng cho việc học tập PHP, những kiến thức bạn có thể thu được là:
-	1 PHP cơ bản
-	2 Làm việc với Form, Post check, Validate dữ liệu, Upload file
-	3 Làm việc với biến session
-	4 Kết nối database, insert, update, delete, select dữ liệu với MySQLi
-	5 Quản lý người dùng đơn giản, login, update profile, forgot password
-	6 Giỏ hàng, quản lý đơn hàng
-	7 Sử dụng các plugin jquery chart, WYSIWYG, FancyBox
-	8 Cách tạo một ứng dụng CRUD (Create-Read-Update-Delete) với PHP
-	9 Cách sử dụng thư viện GD2 để tạo thumbnail ảnh
-	10 Send email html với hàm mb_send_mail
-	11 Cách sử dụng slug
-	12 Backup, Restore database
+  1. PHP cơ bản
+  2. Làm việc với Form, Post check, Validate dữ liệu, Upload file
+  3. Làm việc với biến session
+  4. Kết nối database, insert, update, delete, select dữ liệu với MySQLi
+  5. Quản lý người dùng đơn giản, login, update profile, forgot password
+  6. Giỏ hàng, quản lý đơn hàng
+  7. Sử dụng các plugin jquery chart, WYSIWYG, FancyBox
+  8. Cách tạo một ứng dụng CRUD (Create-Read-Update-Delete) với PHP
+  9. Cách sử dụng thư viện GD2 để tạo thumbnail ảnh
+  10. Send email html với hàm mb_send_mail
+  11. Cách sử dụng slug
+  12. Backup, Restore database
 
 
 DEMO
