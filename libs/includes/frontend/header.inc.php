@@ -29,7 +29,7 @@ function renderMenuTop()
 		if(in_array(basename($_SERVER['PHP_SELF']), $menu['active'])) {
 			$active = 'class="active"';
 		}
-		$html .= '<li '.$active.'><a href="'.$menu['url'].'">'.$menu['label'].'</a></li>';
+		$html .= '<li '.$active.'><a href="'.$menu['url'].'" onClick="ga(\'send\', \'event\', \'button\', \'click\', \''.$menu['label'].'\');">'.$menu['label'].'</a></li>';
 	}
 	$html .= '</ul>';
 
@@ -54,7 +54,7 @@ function renderMenuTop()
 
 			<header>
 				<a href="index.php" id="branchLogo"><span>PHPStore (Demo version)</span></a>
-				<div id="shoppingCart"><a href="cart.php">Giỏ hàng có <span id="totalInCart"><?= getTotalProductInCart() ?></span> sản phẩm</a></div>
+				<div id="shoppingCart"><a href="cart.php" onClick="ga('send', 'event', 'button', 'click', 'Go to Cart');">Giỏ hàng có <span id="totalInCart"><?= getTotalProductInCart() ?></span> sản phẩm</a></div>
 			</header><!-- /header -->
 
 			<nav id="topMenu"><?= renderMenuTop() ?></nav><!-- /#topMenu -->

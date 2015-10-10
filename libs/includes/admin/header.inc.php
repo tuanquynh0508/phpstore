@@ -30,7 +30,7 @@ function renderMenuTop()
 		if(in_array(basename($_SERVER['PHP_SELF']), $menu['active'])) {
 			$active = 'class="active"';
 		}
-		$html .= '<li '.$active.'><a href="'.$menu['url'].'">'.$menu['label'].'</a></li>';
+		$html .= '<li '.$active.'><a href="'.$menu['url'].'" onClick="ga(\'send\', \'event\', \'button\', \'click\', \''.$menu['label'].'\');">'.$menu['label'].'</a></li>';
 	}
 	$html .= '</ul>';
 
@@ -60,7 +60,7 @@ function renderMenuTop()
 			<?php if(checkAuthentication()): ?>
 			<div id="userBox">
 				Xin chào <?= getUserAttrSession('fullname') ?>!.
-				[<a href="admin_profile.php">Hồ sơ</a> | <a href="admin_logout.php">Thoát</a>]
+				[<a href="admin_profile.php" onClick="ga('send', 'event', 'button', 'click', 'Go to Profile');">Hồ sơ</a> | <a href="admin_logout.php" onClick="ga('send', 'event', 'button', 'click', 'Logout');">Thoát</a>]
 			</div>
 			<?php endif; ?>
 		</header>

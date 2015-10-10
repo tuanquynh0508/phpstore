@@ -723,7 +723,7 @@ function renderFrontendLeftMenu($condb) {
 		if($slug == $category->slug) {
 			$class = 'class="active"';
 		}
-		$html .= '	<li '.$class.'><a href="category.php?slug='.$category->slug.'">'.$category->title.'</a></li>';
+		$html .= '	<li '.$class.'><a href="category.php?slug='.$category->slug.'" onClick="ga(\'send\', \'event\', \'category_menu\', \'click\', \''.$category->title.'\');">'.$category->title.'</a></li>';
 	}
 	$html .= '</ul>';
 
@@ -765,7 +765,7 @@ function renderBreadcrumb($pages = array()) {
 	$html .= '		<li><a href="index.php">Trang chủ</a></li>';
 	if(!empty($pages)) {
 		foreach ($pages as $page) {
-			$html .= '<li><a href="'.$page['url'].'">'.$page['title'].'</a></li>';
+			$html .= '<li><a href="'.$page['url'].'" onClick="ga(\'send\', \'event\', \'breadcrumb\', \'click\', \''.$page['title'].'\');">'.$page['title'].'</a></li>';
 		}
 	}
 	$html .= '	</ul>';
