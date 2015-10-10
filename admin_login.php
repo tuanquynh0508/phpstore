@@ -110,7 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				- <a href="admin_forgot_password.php">Quên mật khẩu?</a>
 			</p>
 			<p>
-				Các trường có dấu <span class="required">*</span> là các trường bắt buộc cần nhập.
+				Các trường có dấu <span class="required">*</span> là các trường bắt buộc cần nhập.<br/>
+				Xem demo với tài khoản admin/123456 hoặc editor/123456
 			</p>
 		</div>
 	</div><!-- /.form-row clearfix -->

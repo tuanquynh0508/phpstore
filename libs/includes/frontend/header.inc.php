@@ -14,6 +14,7 @@ function renderMenuTop()
 		array('label' => 'Giới thiệu', 'url' => 'about.php', 'active' => array('about.php')),
 		array('label' => 'Hướng dẫn mua hàng', 'url' => 'help.php', 'active' => array('help.php')),
 		array('label' => 'Liên hệ', 'url' => 'contact.php', 'active' => array('contact.php')),
+		array('label' => 'Download source code', 'url' => 'https://github.com/tuanquynh0508/phpstore', 'active' => array('')),
 	);
 
 	if(checkAuthentication()) {
@@ -52,7 +53,7 @@ function renderMenuTop()
 		<div class="wrapper">
 
 			<header>
-				<a href="index.php" id="branchLogo"><span>PHPStore</span></a>
+				<a href="index.php" id="branchLogo"><span>PHPStore (Demo version)</span></a>
 				<div id="shoppingCart"><a href="cart.php">Giỏ hàng có <span id="totalInCart"><?= getTotalProductInCart() ?></span> sản phẩm</a></div>
 			</header><!-- /header -->
 
