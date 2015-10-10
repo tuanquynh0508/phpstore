@@ -49,9 +49,9 @@ $listProductView = getDataProductView($oDBAccess, $product->id);
 				</section><!-- /#leftPage -->
 
 				<section id="rightPage">
-					
+
 					<?= renderBreadcrumb($breadcrumbList) ?>
-					
+
 					<div class="product-summary-box clearfix">
 						<?php if($product->thumbnail !='' && file_exists(UPLOAD_DIR.$product->thumbnail)): ?>
 						<div class="pull-left">
@@ -64,32 +64,38 @@ $listProductView = getDataProductView($oDBAccess, $product->id);
 							<p>Mã sản phẩm: <?= $product->id ?></p>
 							<p>Danh mục: <?= $productCategory->title ?></p>
 							<p>Hãng sản xuất: <?= $productFirm->title ?></p>
-							<p class="price">Giá: <?= vietnameseMoneyFormat($product->price, 'VND') ?></p>
+							<p class="price">Giá: 
+								<?php if($product->price != 0): ?>
+								<?= vietnameseMoneyFormat($product->price, 'VND') ?>
+								<?php else: ?>
+								Liên hệ để biết giá
+								<?php endif; ?>
+							</p>
 							<p>
 								Số lượng: <input type="number" value="1" class="product-quantity numeric" min="1"/>
 								<button class="btn-add-cart" data-id="<?= $product->id ?>">Mua sản phẩm</button>
 							</p>
 						</div>
 					</div><!-- /.product-summary-box -->
-					
+
 					<div class="product-detail-box">
 						<ul class="tab-title clearfix">
 							<li class="active"><a href="#detailTab">Chi tiết</a></li>
 							<li><a href="#reviewTab">Đánh giá người dùng</a></li>
 						</ul>
 						<div class="tab-content">
-							
+
 							<div class="tab-item active" id="detailTab">
 								<?= $product->content ?>
 							</div><!-- /.tab-item -->
-							
+
 							<div class="tab-item" id="reviewTab">
 								<p>Đánh giá người dùng có thể sử dụng các plugin của Facebook hoặc các plugin về comment của các dịch vụ cung cấp khác.</p>
 							</div><!-- /.tab-item -->
-							
+
 						</div><!-- /.tab-content -->
 					</div><!-- /.product-detail-box -->
-					
+
 					<?php if(!empty($listProductView)): ?>
 					<h2>Các sản phẩm đã xem</h2>
 					<hr/>

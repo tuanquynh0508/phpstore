@@ -248,6 +248,8 @@ footer {
 	text-decoration: none;
 	color: #333;
 	font-weight: bold;
+	display: inline-block;
+	padding: 0px 10px;
 }
 .category .product-item .title a:hover {
 	color: #EC2121;

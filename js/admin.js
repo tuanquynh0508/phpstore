@@ -12,3 +12,7 @@ $('.invalid').keypress(function(){
     $(this).removeClass('invalid');
 	$(this).next('.errors').remove();
 });
+
+$('input[name="price"]').on('keyup', function(){
+    this.value=this.value.replace(/,/g, "");
+});

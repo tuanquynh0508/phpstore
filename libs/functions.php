@@ -73,7 +73,7 @@ function slugify($str) {
  */
 function getCategoryList($condb) {
 	$list = array();
-	$sql = "SELECT * FROM category";
+	$sql = "SELECT * FROM category ORDER BY title ASC";
 	if ($result = $condb->query($sql)) {
 		while ($obj = $result->fetch_object()) {
 			$list[] = $obj;
@@ -95,7 +95,7 @@ function getCategoryList($condb) {
  */
 function getFirmList($condb) {
 	$list = array();
-	$sql = "SELECT * FROM firm";
+	$sql = "SELECT * FROM firm ORDER BY title ASC";
 	if ($result = $condb->query($sql)) {
 		while ($obj = $result->fetch_object()) {
 			$list[] = $obj;
@@ -339,7 +339,7 @@ function stringRandom($length = 16)
 
 /**
  * Hàm copy tất cả các file và thư mục
- * 
+ *
  * @param string $source
  * @param string $dest
  */
@@ -349,7 +349,7 @@ function copyFolder($source, $dest)
     if (is_link($source)) {
         return symlink(readlink($source), $dest);
     }
-    
+
     // Simple copy for a file
     if (is_file($source)) {
         return copy($source, $dest);
@@ -379,7 +379,7 @@ function copyFolder($source, $dest)
 
 /**
  * Xóa tất cả thư mục và file
- * 
+ *
  * @param string $dirPath
  */
 function deleteDirectory($dirPath) {
@@ -502,7 +502,7 @@ function generateUserResetToken($username) {
 //CART
 /**
  * Thêm sản phẩm vào giỏ hàng
- * 
+ *
  * @param integer $productId
  * @param integer $quantity
  */
@@ -520,7 +520,7 @@ function addCart($productId, $quantity) {
 
 /**
  * Lấy thông tin giỏ hàng
- * 
+ *
  * @return array
  */
 function getCart() {
@@ -535,7 +535,7 @@ function getCart() {
 
 /**
  * Lưu thông tin giỏ hàng
- * 
+ *
  * @param array $cart
  */
 function setCart($cart) {
@@ -551,7 +551,7 @@ function removeCart() {
 
 /**
  * Lấy số lượng sản phẩm trong giỏ hàng
- * 
+ *
  * @return integer
  */
 function getTotalProductInCart() {
@@ -569,7 +569,7 @@ function getTotalProductInCart() {
 
 /**
  * Tạo bảng sản phẩm của giỏ hàng cho gửi mail
- * 
+ *
  * @param array $productList
  * @return string
  */
@@ -600,7 +600,7 @@ function renderCartTableProductForEmail($productList) {
 		}
 		$html .= $item->title;
 		$html .= '			</td>';
-		$html .= '			<td align="center">'.vietnameseMoneyFormat($item->price, 'VND').'</td>';
+		$html .= '			<td align="center">'.(($item->price != 0)?vietnameseMoneyFormat($item->price, 'VND'):'Liên hệ').'</td>';
 		$html .= '			<td align="center">'.$cart[$item->id].'</td>';
 		$html .= '			<td align="center">'.vietnameseMoneyFormat($realPrice, 'VND').'</td>';
 		$html .= '		</tr>';
@@ -620,7 +620,7 @@ function renderCartTableProductForEmail($productList) {
 
 /**
  * Tạo trạng thái đơn hàng
- * 
+ *
  * @param integer $status
  * @return string
  */
@@ -656,7 +656,7 @@ function renderCartStatus($status) {
 
 /**
  * Danh sách các trạng thái của đơn hàng
- * 
+ *
  * @return array
  */
 function getCartStatusList() {
@@ -670,7 +670,7 @@ function getCartStatusList() {
 
 /**
  * Thống kê doanh thu theo tháng hiện tại
- * 
+ *
  * @param mysqli $condb
  * @return string
  */
@@ -740,7 +740,7 @@ function renderFrontendLeftMenu($condb) {
  */
 function getProductByCategory($condb, $category) {
 	$list = array();
-	$sql = "SELECT * FROM product WHERE category_id=".$category->id." LIMIT 0,4";
+	$sql = "SELECT * FROM product WHERE category_id=".$category->id." ORDER BY created_at DESC LIMIT 0,4";
 	if ($result = $condb->query($sql)) {
 		while ($obj = $result->fetch_object()) {
 			$list[] = $obj;
@@ -755,7 +755,7 @@ function getProductByCategory($condb, $category) {
 
 /**
  * Tạo đường dẫn Breadcrumb
- * 
+ *
  * @param array $pages
  * @return string
  */
@@ -770,14 +770,14 @@ function renderBreadcrumb($pages = array()) {
 	}
 	$html .= '	</ul>';
 	$html .= '</div>';
-	
+
 	return $html;
 }
 
 //PRODUCT SAW
 /**
  * Thêm sản phẩm vào danh sách đã xem
- * 
+ *
  * @param integer $productId
  */
 function addProductView($productId) {
@@ -785,17 +785,17 @@ function addProductView($productId) {
 	if(count($productIds) >= NUMBER_PRODUCT_VIEW) {
 		array_shift($productIds);
 	}
-	
+
 	if(!in_array($productId, $productIds)) {
 		$productIds[] = $productId;
 	}
-	
+
 	setProductView($productIds);
 }
 
 /**
  * Lấy danh sách sản phẩm đã xem
- * 
+ *
  * @return array
  */
 function getProductView() {
@@ -810,7 +810,7 @@ function getProductView() {
 
 /**
  * Lưu thông tin sản phẩm đã xem
- * 
+ *
  * @param array $list
  */
 function setProductView($list) {
@@ -819,7 +819,7 @@ function setProductView($list) {
 
 /**
  * Lấy thông tin sản phẩm đã xem từ database
- * 
+ *
  * @param mysqli $condb
  * @return array
  */
@@ -828,9 +828,9 @@ function getDataProductView($condb, $currentId) {
 	if(!empty($productIds)) {
 		$sql = "SELECT * FROM product WHERE id IN(".  implode(',', $productIds).") AND id != $currentId";
 		$list = $condb->findAllBySql($sql);
-		
+
 		return $list;
 	}
-	
+
 	return array();
 }

@@ -47,7 +47,7 @@ $breadcrumbList = array(
 				</section><!-- /#leftPage -->
 
 				<section id="rightPage">
-					
+
 					<?= renderBreadcrumb($breadcrumbList) ?>
 
 					<div class="category">
@@ -66,7 +66,13 @@ $breadcrumbList = array(
 									</a>
 								</div>
 								<p class="title"><a href="product.php?slug=<?= $item->slug ?>" title="<?= $item->title ?>"><?= $item->title ?></a></p>
-								<p class="price"><?= vietnameseMoneyFormat($item->price, 'VND') ?></p>
+								<p class="price">
+									<?php if($item->price != 0): ?>
+									<?= vietnameseMoneyFormat($item->price, 'VND') ?>
+									<?php else: ?>
+									Liên hệ để biết giá
+									<?php endif; ?>
+								</p>
 								<button class="btn-add-cart" data-id="<?= $item->id ?>">Mua sản phẩm</button>
 							</div><!-- /.product-item -->
 							<?php endforeach; ?>

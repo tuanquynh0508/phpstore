@@ -119,6 +119,8 @@ productTabInit();
 //Khởi tạo cart
 cartInit();
 
+$('.product-item').matchHeight();
+
 $(".fancybox").fancybox();
 
 $(".numeric").keypress(function (event) {

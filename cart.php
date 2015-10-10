@@ -39,9 +39,9 @@ if(!empty($cart)) {
 				<section id="rightPage">
 
 					<h1 class="pageTitle">Giỏ hàng</h1>
-					
+
 					<?php include "libs/includes/frontend/flash_message.inc.php"; ?>
-					
+
 					<form action="" method="POST">
 						<?php if(!empty($cart)): ?>
 						<table class="cart">
@@ -58,12 +58,14 @@ if(!empty($cart)) {
 							<tbody>
 								<?php
 								$totalPrice = 0;
-								foreach($productList as $item):	
+								$i = 0;
+								foreach($productList as $item):
 									$realPrice = $item->price*$cart[$item->id];
 									$totalPrice += $realPrice;
+									$i++;
 								?>
 								<tr>
-									<td class="text-center">1</td>
+									<td class="text-center"><?= $i ?></td>
 									<td>
 										<a href="product.php?slug=<?= $item->slug ?>" title="<?= $item->title ?>">
 											<?php if($item->thumbnail !='' && file_exists(UPLOAD_DIR.$item->thumbnail)): ?>
@@ -72,8 +74,18 @@ if(!empty($cart)) {
 											<?= $item->title ?>
 										</a>
 									</td>
-									<td class="text-center"><span class="price" data-value="<?= $item->price ?>"><?= vietnameseMoneyFormat($item->price, 'VND') ?></span></td>
-									<td class="text-center"><input type="number" name="quantity[<?= $item->id ?>]" value="<?= $cart[$item->id] ?>" class="product-quantity numeric" min="1"/></td>
+									<td class="text-center">
+										<span class="price" data-value="<?= $item->price ?>">
+											<?php if($item->price != 0): ?>
+											<?= vietnameseMoneyFormat($item->price, 'VND') ?>
+											<?php else: ?>
+											Liên hệ
+											<?php endif; ?>
+										</span>
+									</td>
+									<td class="text-center">
+										<input type="number" name="quantity[<?= $item->id ?>]" value="<?= $cart[$item->id] ?>" class="product-quantity numeric" min="1" />
+									</td>
 									<td class="text-center"><span class="real-price"><?= vietnameseMoneyFormat($realPrice, 'VND') ?></span></td>
 									<td class="text-center">
 										<a href="#" class="btn-delete"><img src="img/frontend/trash.png"/></a>

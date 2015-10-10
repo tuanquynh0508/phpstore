@@ -27,7 +27,7 @@ $validates = array(
 	array('type'=>'required', 'field'=>'customer_email', 'message'=>'Cần nhập Email'),
 	array('type'=>'required', 'field'=>'customer_tel', 'message'=>'Cần nhập Điện thoại'),
 	array('type'=>'required', 'field'=>'customer_address', 'message'=>'Cần nhập Địa chỉ'),
-	array('type'=>'length', 'field'=>'customer_name', 'min'=>3, 'max'=>60, 'message'=>'Độ dài Họ và tên tối thiểu là 3, lớn nhất là 60 ký tự'),	
+	array('type'=>'length', 'field'=>'customer_name', 'min'=>3, 'max'=>60, 'message'=>'Độ dài Họ và tên tối thiểu là 3, lớn nhất là 60 ký tự'),
 	array('type'=>'length', 'field'=>'customer_tel', 'min'=>7, 'max'=>20, 'message'=>'Độ dài Điện thoại tối thiểu là 7, lớn nhất là 20 ký tự'),
 	array('type'=>'length', 'field'=>'customer_address', 'min'=>6, 'max'=>255, 'message'=>'Độ dài Địa chỉ tối thiểu là 6, lớn nhất là 255 ký tự'),
 	array('type'=>'email', 'field'=>'customer_email', 'message'=>'Sai định dạng Email'),
@@ -46,22 +46,22 @@ if(!empty($cart)) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$attributes = $_POST;
-	
+
 	//Truyền lại giá trị cho đối tượng form
 	foreach($attributes as $key => $value){
 		$record->$key = $value;
 	}
-	
+
 	//Đẩy giá trị vào cho đối tượng kiểm tra
 	$oValidator->bindData($attributes);
-	
+
 	//Nếu việc kiểm tra không có lỗi thì thực hiện ghi hoặc cập nhật dữ liệu vào database
 	if($oValidator->validate()) {
-		
+
 		$attributes['created_at'] = date('Y-m-d H:i:s');
 		$attributes['order_status'] = 1;
 		$record = $oDBAccess->save('orders', $attributes);
-		
+
 		foreach($productList as $product) {
 			$orderProduct = array(
 				'order_id' => $record->id,
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			);
 			$oDBAccess->save('order_product', $orderProduct);
 		}
-		
+
 		//Send email
 		$subject = "Đơn đặt hàng #{$record->id} từ {$record->customer_name} trên ".APP_NAME;
 		$filename = __DIR__.'/libs/templates/email/order.html';
@@ -89,9 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		);
 		$body = getTemplate($filename, $params);
 		sendEmail(ORDER_EMAIL, $subject, $body, $record->customer_email, $record->customer_name);
-		
+
 		removeCart();
-		
+
 		$oFlashMessage->setFlashMessage('success', 'Tạo đơn hàng thành công, cảm ơn bạn đã đặt hàng tại '.APP_NAME);
 		header("Location: index.php");
 		exit;
@@ -109,9 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				<section id="rightPage">
 
 					<h1 class="pageTitle">Tạo đơn hàng</h1>
-					
+
 					<?php include "libs/includes/frontend/flash_message.inc.php"; ?>
-					
+
 					<?php if(!empty($cart)): ?>
 					<table class="cart">
 						<thead>
@@ -126,12 +126,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						<tbody>
 							<?php
 							$totalPrice = 0;
-							foreach($productList as $item):	
+							$i = 0;
+							foreach($productList as $item):
 								$realPrice = $item->price*$cart[$item->id];
 								$totalPrice += $realPrice;
+								$i++;
 							?>
 							<tr>
-								<td class="text-center">1</td>
+								<td class="text-center"><?= $i ?></td>
 								<td>
 									<a href="product.php?slug=<?= $item->slug ?>" title="<?= $item->title ?>">
 										<?php if($item->thumbnail !='' && file_exists(UPLOAD_DIR.$item->thumbnail)): ?>
@@ -140,7 +142,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 										<?= $item->title ?>
 									</a>
 								</td>
-								<td class="text-center"><span class="price" data-value="<?= $item->price ?>"><?= vietnameseMoneyFormat($item->price, 'VND') ?></span></td>
+								<td class="text-center">
+									<span class="price" data-value="<?= $item->price ?>">
+										<?php if($item->price != 0): ?>
+										<?= vietnameseMoneyFormat($item->price, 'VND') ?>
+										<?php else: ?>
+										Liên hệ
+										<?php endif; ?>
+									</span>
+								</td>
 								<td class="text-center"><?= $cart[$item->id] ?></td>
 								<td class="text-center"><span class="real-price"><?= vietnameseMoneyFormat($realPrice, 'VND') ?></span></td>
 							</tr>
