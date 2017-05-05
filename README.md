@@ -28,9 +28,9 @@ SỬ DỤNG
 
 DEMO
 ----------
-Trang bên ngoài: http://phpstore.i-designer.net
+Trang bên ngoài: http://phpstore.tnqsoft.com
 
-Trang quản trị: http://phpstore.i-designer.net/admin.php (tài khoản admin / 123456)
+Trang quản trị: http://phpstore.tnqsoft.com/admin.php (tài khoản admin / 123456)
 
 SCREENSHOT
 ----------
@@ -58,7 +58,7 @@ LIÊN HỆ
 -------
 Nguyễn Như Tuấn
 
-http://i-designer.net
+http://tnqsoft.com
 
 tuanquynh0508@gmail.com
 
